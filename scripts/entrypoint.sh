@@ -22,4 +22,17 @@ if [ -d /paas-data/app ]; then
 fi
 
 # =================================
+# Git Reset
+
+if [ ${GIT_MODE} ]; then
+  CURRENT_DIR=`pwd`
+
+  cd /paas_app/app/
+  git reset --hard
+  git pull
+
+  cd $CURRENT_DIR
+fi
+
+# =================================
 # Original Command:

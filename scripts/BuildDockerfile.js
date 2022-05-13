@@ -6,21 +6,31 @@ module.exports = function (config) {
 
   // 這是Gitlab CI Runner的路徑
   const BUILD_DIR = path.join('/builds/', process.env.CI_PROJECT_NAMESPACE, process.env.CI_PROJECT_NAME)
-  
+  const REPO = process.env.CI_PROJECT_NAME + '-' + process.env.CI_PROJECT_NAMESPACE
+  console.log("REPO: " + REPO)
+
   let { USER, CMD } = config.app.Dockerfile
+  let { app_path } = config.app
+  let app_path_parent = path.dirname(app_path)
   let system_user = USER
+
+  fs.mkdirSync('./build_tmp/')
+  await ShellExec(`echo build_tmp >> .dockerignore`)
+
+  // ------------------------------------
+  // 處理備份檔案問題
 
   // 解壓縮
   // https://www.npmjs.com/package/unzipper
-  let targetDir = './paas_backup/'
-  let containerBackupFolder = '/paas_backup/'
+  let targetDir = `${BUILD_DIR}/build_tmp/data`
+  let containerBackupFolder = '/paas_data/'
 
   if (fs.existsSync(targetDir)) {
     fs.rmSync(targetDir, { recursive: true, force: true });
   }
   fs.mkdirSync(targetDir)
 
-  let zipPath = `./data/app.zip`
+  let zipPath = `${BUILD_DIR}/data/app.zip`
   let copyCmd = ''
   if (fs.existsSync(zipPath)) {
     fs.createReadStream(zipPath)
@@ -42,13 +52,23 @@ module.exports = function (config) {
   // 建立 entrypoint.sh
   let script = fs.readFileSync('/app/docker-paas-build-app/scripts/entrypoint.sh', 'utf8')
   script = script + '\n' + CMD + '\n\n'
-  fs.writeFileSync('entrypoint.sh', script, 'utf8')
+  fs.writeFileSync('./build_tmp/entrypoint.sh', script, 'utf8')
 
   console.log('====================')
-  console.log(path.join(BUILD_DIR + '/entrypoint.sh'))
+  console.log(path.join(BUILD_DIR, '/build_tmp/entrypoint.sh'))
   console.log('====================')
   console.log(script)
   console.log('====================\n\n')
+
+  // ----------------------------------------------------
+  // Git
+
+  const APP_GIT_URL = config.environment.build.app_git_url
+  let REPO_NAME = APP_GIT_URL.slice(APP_GIT_URL.lastIndexOf('/') + 1)
+  REPO_NAME = REPO_NAME.slice(0, REPO_NAME.lastIndexOf('.'))
+
+  let {username, host} = new URL(APP_GIT_URL)
+  let containerAppFolder = '/paas_app/'
 
   // ------------------------
 
@@ -64,7 +84,22 @@ RUN echo "PermitRootLogin yes" >> /etc/ssh/sshd_config
 ENV DATA_PATH=${dataPath}
 ${copyCmd}
 
-COPY entrypoint.sh ${containerBackupFolder}
+# APP GIT
+ENV GIT_MODE=true
+RUN mkdir ${containerAppFolder}
+WORKDIR ${containerAppFolder}
+RUN git clone ${APP_GIT_URL}
+
+WORKDIR ${containerAppFolder}${REPO_NAME}/
+RUN git config --global user.email "${username}@${host}"
+RUN git config --global user.name "${username}"
+RUN git checkout -b ${REPO} || git checkout ${REPO}
+
+# APP
+RUN rm -rf ${app_path}
+RUN ln -s ${containerAppFolder}${REPO_NAME} ${app_path_parent}
+
+COPY build_tmp/entrypoint.sh ${containerBackupFolder}
 RUN chmod 777 ${containerBackupFolder}entrypoint.sh
 
 CMD ["sh", "${containerBackupFolder}entrypoint.sh"]

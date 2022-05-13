@@ -2,7 +2,11 @@ const fs = require('fs')
 const ShellExec = require('./lib/ShellExec.js')
 
 async function main (config) {
-  
+  if (config.deploy.git_mode !== true) {
+    console.log('Git mode is disabled.')
+    return
+  }
+
   const BUILD_DIR = process.cwd()
   console.log("BUILD_DIR: " + BUILD_DIR)
 
