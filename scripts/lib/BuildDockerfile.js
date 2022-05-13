@@ -7,27 +7,18 @@ module.exports = function (config) {
   // 這是Gitlab CI Runner的路徑
   const BUILD_DIR = path.join('/builds/', process.env.CI_PROJECT_NAMESPACE, process.env.CI_PROJECT_NAME)
 
-  //console.log('ENV', process.env)
-  let module = process.env["BUILD_DATABASE_MODULE"]
-  //console.log('module', module)
-
-  let {dockerImage, dataPath, cmd, system_user} = config.environment.database[module]
-
-  let setSystemUser = ''
-  if (system_user) {
-    setSystemUser = `USER ${system_user}`
-  }
-
+  
   // 解壓縮
   // https://www.npmjs.com/package/unzipper
-  let targetDir = './backup/'
-  let containerBackupFolder = '/backup/'
+  let targetDir = './paas_backup/'
+  let containerBackupFolder = '/paas_backup/'
+
   if (fs.existsSync(targetDir)) {
     fs.rmSync(targetDir, { recursive: true, force: true });
   }
   fs.mkdirSync(targetDir)
 
-  let zipPath = `./data/database-${module}.zip`
+  let zipPath = `./data/app.zip`
   let copyCmd = ''
   if (fs.existsSync(zipPath)) {
     fs.createReadStream(zipPath)

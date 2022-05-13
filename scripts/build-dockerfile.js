@@ -21,6 +21,10 @@ const main = async function () {
   //   return true
   // }
   const config = await LoadYAMLConfig()
+
+  console.log(config)
+  throw new Error('Test finish')
+
   //await UnzipDatabasePVC(config)
   BuildDockerfile(config)
   await PushDockerfile(config)

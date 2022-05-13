@@ -27,7 +27,7 @@ RUN git clone https://github.com/pulipulichen/docker-paas-build-app.git
 WORKDIR /app/docker-paas-build-app
 
 COPY package.json /app/docker-paas-build-app/
-COPY entrypoint.json /app/docker-paas-build-app/
+COPY entrypoint.sh /app/docker-paas-build-app/
 
 RUN npm i
 
@@ -36,5 +36,5 @@ RUN npm i
 #COPY scripts /app/scripts/
 
 WORKDIR /app/docker-paas-build-app/scripts/
-ENTRYPOINT [ "sh", "/app/docker-paas-build-app/entrypoint.sh" ]
+#ENTRYPOINT [ "sh", "/app/docker-paas-build-app/entrypoint.sh" ]
 
