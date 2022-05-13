@@ -4,7 +4,7 @@ module.exports = function (cmd, stderrHandler, errorHandler) {
 
   if (typeof(stderrHandler) !== 'function') {
     stderrHandler = function (stderr) {
-      console.log(`[STDERR]\n${stderr}`);
+      console.log(`[STDERR] ${stderr}`);
     }
   }
 
@@ -24,7 +24,11 @@ module.exports = function (cmd, stderrHandler, errorHandler) {
       if (stderr) {
         stderrHandler(stderr);
       }
-      console.log(`[STDOUT]\n${stdout}`)
+
+      if (stdout.trim() !== '') {
+        console.log(`[STDOUT] ${stdout}`)
+      }
+      
       resolve(`[STDOUT]\n${stdout}`)
     });
   })
