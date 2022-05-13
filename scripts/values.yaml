@@ -1,0 +1,18 @@
+
+database:
+  # mysql | none
+  driver: mysql
+  database: database
+  username: user
+  password: password
+  # true | false
+  init: true
+
+# ==============================
+deploy:
+  project:
+    name: {{ PROJECT_NAME }}
+    namespace: {{ PROJECT_NAMESPACE }}
+  build:
+    tag: {{ DOCKER_IMAGE_TAG }}
+    tag-db: {{ DOCKER_IMAGE_TAG-DB }}

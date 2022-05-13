@@ -1,0 +1,10 @@
+{
+  "scripts": {
+    "build-push": "./build-push.sh"
+  },
+  "dependencies": {
+    "js-yaml": "4.1.0",
+    "unzipper": "0.10.11",
+    "fast-glob": "3.2.11"
+  }
+}
