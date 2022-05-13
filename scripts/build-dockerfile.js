@@ -12,8 +12,9 @@ const LoadYAMLConfig = require('./lib/LoadYAMLConfig.js')
 // }
 
 //const UnzipDatabasePVC = require('./lib/UnzipDatabasePVC.js')
-const BuildDockerfile = require('./lib/BuildDockerfile.js')
-const PushDockerfile = require('./lib/PushDockerfile.js')
+const AppCommitToGit = require('./AppCommitToGit.js')
+const BuildDockerfile = require('./BuildDockerfile.js')
+const PushDockerfile = require('./PushDockerfile.js')
 
 const main = async function () {
   // if (config.backup.persist_data === true) {
@@ -22,9 +23,7 @@ const main = async function () {
   // }
   const config = await LoadYAMLConfig()
 
-  console.log(config)
-  throw new Error('Test finish')
-
+  await AppCommitToGit(config)
   //await UnzipDatabasePVC(config)
   BuildDockerfile(config)
   await PushDockerfile(config)

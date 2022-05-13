@@ -1,7 +1,7 @@
 
 const { exec } = require("child_process");
 
-const isDirEmpty = require("./isDirEmpty")
+const isDirEmpty = require("./lib/isDirEmpty")
 
 module.exports = function (config) {
   //console.log(config)

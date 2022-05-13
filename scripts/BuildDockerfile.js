@@ -6,8 +6,10 @@ module.exports = function (config) {
 
   // 這是Gitlab CI Runner的路徑
   const BUILD_DIR = path.join('/builds/', process.env.CI_PROJECT_NAMESPACE, process.env.CI_PROJECT_NAME)
-
   
+  let { USER, CMD } = config.app.Dockerfile
+  let system_user = USER
+
   // 解壓縮
   // https://www.npmjs.com/package/unzipper
   let targetDir = './paas_backup/'
@@ -23,20 +25,27 @@ module.exports = function (config) {
   if (fs.existsSync(zipPath)) {
     fs.createReadStream(zipPath)
       .pipe(unzipper.Extract({ path: targetDir }))
-    copyCmd = `COPY ${targetDir} /backup/`
+    copyCmd = `COPY ${targetDir} ${containerBackupFolder}`
 
     if (system_user) {
-      copyCmd += `\nRUN chown ${system_user}:${system_user} -R /backup/`
+      copyCmd += `\nRUN chown ${system_user}:${system_user} -R ${containerBackupFolder}`
     }
   }
 
-  // 建立 build-init.sh
-  let script = fs.readFileSync('/app/scripts/build-init.sh', 'utf8')
-  script = script + '\n' + cmd + '\n\n'
-  fs.writeFileSync('build-init.sh', script, 'utf8')
+  // ----------------------------------------------------
+  let setSystemUser = ''
+  if (USER && USER !== 'root') {
+    setSystemUser = `USER ${USER}`
+  }
+
+  // ----------------------------------------------------
+  // 建立 entrypoint.sh
+  let script = fs.readFileSync('/app/docker-paas-build-app/scripts/entrypoint.sh', 'utf8')
+  script = script + '\n' + CMD + '\n\n'
+  fs.writeFileSync('entrypoint.sh', script, 'utf8')
 
   console.log('====================')
-  console.log(path.join(BUILD_DIR + '/build-init.sh'))
+  console.log(path.join(BUILD_DIR + '/entrypoint.sh'))
   console.log('====================')
   console.log(script)
   console.log('====================\n\n')
@@ -45,13 +54,20 @@ module.exports = function (config) {
 
   dockerfile = `FROM ${dockerImage}
 
+# WEBSSH
+RUN apt update
+RUN apt-get install -y openssh-server
+RUN systemctl enable ssh
+RUN echo "PermitRootLogin yes" >> /etc/ssh/sshd_config
+
+# DATA
 ENV DATA_PATH=${dataPath}
-
 ${copyCmd}
-COPY build-init.sh /backup/build-init.sh
-RUN chmod 777 /backup/build-init.sh
 
-CMD ["sh", "/backup/build-init.sh"]
+COPY entrypoint.sh ${containerBackupFolder}
+RUN chmod 777 ${containerBackupFolder}entrypoint.sh
+
+CMD ["sh", "${containerBackupFolder}entrypoint.sh"]
 
 
 ${setSystemUser}
