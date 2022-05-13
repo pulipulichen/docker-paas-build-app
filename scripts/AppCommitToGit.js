@@ -26,9 +26,9 @@ async function main (config) {
   const DEPLOY_GIT_URL = config.environment.build.app_git_url
   await ShellExec(`git clone ${DEPLOY_GIT_URL}`)
 
-  const REPO_NAME = DEPLOY_GIT_URL.slice(DEPLOY_GIT_URL.lastIndexOf('/') + 1)
-      .slice(0, DEPLOY_GIT_URL.lastIndexOf('.'))
-  process.chdir(tmpGitPath + REPO_NAME)
+  let REPO_NAME = DEPLOY_GIT_URL.slice(DEPLOY_GIT_URL.lastIndexOf('/') + 1)
+  REPO_NAME = REPO_NAME.slice(0, REPO_NAME.lastIndexOf('.'))
+  process.chdir(tmpGitPath + '/' + REPO_NAME)
 
   // -----------------------------
   // 設定global name and email
