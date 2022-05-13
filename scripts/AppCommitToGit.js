@@ -1,3 +1,5 @@
+const fs = require('fs')
+const ShellExec = require('./lib/ShellExec.js')
 
 async function main (config) {
   
