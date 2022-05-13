@@ -23,6 +23,11 @@ const main = async function () {
   // }
   const config = await LoadYAMLConfig()
 
+  if (config.deploy.enable !== true) {
+    console.log('Build is disabled.')
+    return
+  }
+
   await AppCommitToGit(config)
   //await UnzipDatabasePVC(config)
   BuildDockerfile(config)
