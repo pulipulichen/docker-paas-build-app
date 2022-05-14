@@ -2,6 +2,8 @@ const fs = require('fs')
 const path = require('path')
 const unzipper = require('unzipper')
 
+const ShellExec = require('./lib/ShellExec.js')
+
 module.exports = async function (config) {
 
   // 這是Gitlab CI Runner的路徑
