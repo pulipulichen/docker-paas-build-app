@@ -126,9 +126,14 @@ COPY app/ ${app_path}
     dockerfileCopy = dockerfileAppGit
   }
 
+
+  // ------------------------
+  // Base Dockerfile
+  let BaseDockerfile = fs.readFileSync(`./deploy/Dockerfile`, 'utf8')
+
   // ------------------------
 
-  let dockerfile = `FROM ${dockerImage}
+  let dockerfile = `${BaseDockerfile}
 
 # WEBSSH
 RUN apt update
