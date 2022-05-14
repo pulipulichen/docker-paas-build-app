@@ -30,7 +30,7 @@ const main = async function () {
 
   await AppCommitToGit(config)
   //await UnzipDatabasePVC(config)
-  BuildDockerfile(config)
+  await BuildDockerfile(config)
   await PushDockerfile(config)
 }
 

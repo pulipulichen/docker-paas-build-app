@@ -1,49 +1,57 @@
 
-const { exec } = require("child_process");
+//const { exec } = require("child_process");
 
-const isDirEmpty = require("./lib/isDirEmpty")
+//const isDirEmpty = require("./lib/isDirEmpty")
 
-module.exports = function (config) {
-  //console.log(config)
-  // let UPDATE_TAG = "false"
-  // if (config.backup.persist_data === false) {
-  //   UPDATE_TAG = "true"
-  // }
-  let UPDATE_TAG = "true"
+const ShellExec = require('./lib/ShellExec.js')
+const fs = require('fs')
+const path = require('path')
 
-  return new Promise(function (resolve, reject) {
-    exec("/app/scripts/build-push.sh " + UPDATE_TAG , (error, stdout, stderr) => {
-      if (error) {
-        console.log(`error: ${error.message}`);
-        reject(error)
-        return;
-      }
-      if (stderr) {
-        
-        //resolve(`stderr: ${stdout}`)
-        //stderr = stderr + ''
-        //console.log('============================================================')
-        //console.log(stderr.indexOf(' not found:'))
-        //console.log(stderr.indexOf('tag does not exist:'))
-        if (stderr.indexOf(' not found:') > -1 ||
-            stderr.indexOf('tag does not exist:') > -1) {
-          reject(stderr)
-          throw Error(stderr)
-        }
-        else {
-          console.log(`stderr: ${stderr}`);
-        }
+function getTagPrefix(config) {
+  let prefix = config.deploy.docker_image_tag_prefix
 
-        //reject(error)
-      }
-      console.log(`stdout: ${stdout}`);
-      resolve(`stdout: ${stdout}`)
+  if (!prefix) {
+    return
+  }
 
-      if (UPDATE_TAG === true) {
-        console.log('============================================================')
-        console.log(`TAG UPDATED: ${process.env.CI_COMMIT_SHORT_SHA}`)
-        console.log('============================================================')
-      }
-    });
-  })
+  prefix = prefix.toLowerCase()
+  prefix = prefix.replace(/[^a-zA-Z0-9\-]/g, "")
+
+  return prefix
+}
+
+module.exports = async function (config) {
+  if (fs.existsSync('./build_tmp/Dockerfile') === false) {
+    console.error('./build_tmp/Dockerfile is not found. Skip build and push.')
+    return false
+  }
+
+  let REPO = process.env.CI_PROJECT_NAME + '-' + process.env.CI_PROJECT_NAMESPACE + 
+             '-app'
+  console.log(`QUAY REPO: ${REPO}`)
+
+  let TAG = process.env.CI_COMMIT_SHORT_SHA
+  let prefix = getTagPrefix(config)
+  if (prefix && prefix !== '') {
+    TAG = prefix + '-' + TAG
+  }
+
+  // ----------------------------------------------------------------
+  // setup QUAY token
+
+  fs.mkdirSync('~/.docker') 
+  await ShellExec(`cp ./webapp-build/token/quay-token.json ~/.docker/config.json`)
+  
+  // ------------------------
+  
+  let QUAY_PREFIX = config.environment.build.quay_prefix
+  await ShellExec(`docker build -f ./build_tmp/Dockerfile -t ${QUAY_PREFIX}/${REPO}:${TAG} .`)
+  await ShellExec(`docker push ${QUAY_PREFIX}/${REPO}:${TAG}`)
+
+  fs.mkdirSync('./ci.tmp/')
+  fs.writeFileSync('./ci.tmp/TAG_APP.txt', TAG, 'utf8')
+
+  console.log('============================================================')
+  console.log(`APP TAG UPDATED: ${tag}`)
+  console.log('============================================================')
 }
