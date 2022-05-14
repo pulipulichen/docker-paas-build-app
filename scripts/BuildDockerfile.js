@@ -8,6 +8,8 @@ module.exports = async function (config) {
 
   // 這是Gitlab CI Runner的路徑
   const BUILD_DIR = path.join('/builds/', process.env.CI_PROJECT_NAMESPACE, process.env.CI_PROJECT_NAME)
+  process.chdir(BUILD_DIR)
+
   const REPO = process.env.CI_PROJECT_NAME + '-' + process.env.CI_PROJECT_NAMESPACE
   console.log("REPO: " + REPO)
 
