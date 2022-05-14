@@ -39,7 +39,8 @@ module.exports = async function (config) {
   // ----------------------------------------------------------------
   // setup QUAY token
 
-  fs.mkdirSync('~/.docker') 
+  //fs.mkdirSync('~/.docker')
+  await ShellExec(`mkdir -p ~/.docker`) 
   await ShellExec(`cp ./webapp-build/token/quay-token.json ~/.docker/config.json`)
   
   // ------------------------
