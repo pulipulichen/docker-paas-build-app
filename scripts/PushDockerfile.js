@@ -53,6 +53,6 @@ module.exports = async function (config) {
   fs.writeFileSync('./ci.tmp/TAG_APP.txt', TAG, 'utf8')
 
   console.log('============================================================')
-  console.log(`APP TAG UPDATED: ${tag}`)
+  console.log(`APP TAG UPDATED: ${TAG}`)
   console.log('============================================================')
 }
