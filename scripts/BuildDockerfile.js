@@ -30,7 +30,7 @@ module.exports = async function (config) {
   if (fs.existsSync(targetDir)) {
     fs.rmSync(targetDir, { recursive: true, force: true });
   }
-  fs.mkdirSync(targetDir)
+  fs.mkdirSync(targetDir, {recursive: true})
 
   let zipPath = `${BUILD_DIR}/data/app.zip`
   let copyCmd = ''
