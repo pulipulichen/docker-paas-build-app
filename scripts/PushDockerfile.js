@@ -41,7 +41,7 @@ module.exports = async function (config) {
 
   //fs.mkdirSync('~/.docker')
   await ShellExec(`mkdir -p ~/.docker`) 
-  await ShellExec(`cp ./webapp-build/token/quay-token.json ~/.docker/config.json`)
+  await ShellExec(`cp ./deploy/token/quay-token.json ~/.docker/config.json`)
   
   // ------------------------
   
