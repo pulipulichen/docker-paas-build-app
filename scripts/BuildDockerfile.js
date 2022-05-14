@@ -155,6 +155,8 @@ RUN chmod 777 ${containerBackupFolder}entrypoint.sh
 
 CMD ["sh", "${containerBackupFolder}entrypoint.sh"]
 
+WORKDIR ${app_path}
+
 # USER 一定要最後設定
 ${setSystemUser}
 `
