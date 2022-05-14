@@ -38,7 +38,7 @@ module.exports = async function () {
     })
   })
 
-  console.log(config)
+  //console.log(config)
 
   if (Object.keys(config).length === 0) {
     throw new Error('values.yaml is not found')
