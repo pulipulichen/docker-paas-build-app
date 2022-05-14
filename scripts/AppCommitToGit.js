@@ -54,7 +54,6 @@ async function main (config) {
   await ShellExec(`git commit -m "CI TAG: ${process.env.CI_COMMIT_SHORT_SHA}"`)
   await ShellExec(`git push -f ${DEPLOY_GIT_URL}`)
 
-  throw new Error('ok嗎？')
 }
 
 module.exports = main
