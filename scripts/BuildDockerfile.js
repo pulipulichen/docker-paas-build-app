@@ -14,7 +14,7 @@ module.exports = async function (config) {
   console.log("REPO: " + REPO)
 
   let { USER, CMD } = config.app.Dockerfile
-  let { app_path } = config.app
+  let { app_path, data_path } = config.app
   let app_path_parent = path.dirname(app_path)
   let system_user = USER
 
@@ -144,7 +144,7 @@ RUN systemctl enable ssh
 RUN echo "PermitRootLogin yes" >> /etc/ssh/sshd_config
 
 # DATA
-ENV DATA_PATH=${dataPath}
+ENV DATA_PATH=${data_path}
 ${copyCmd}
 
 ${dockerfileCopy}
