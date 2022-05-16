@@ -33,7 +33,8 @@ RUN npm i
 
 #RUN mkdir -p /app/scripts
 #WORKDIR /app/scripts
-#COPY scripts /app/scripts/
+COPY scripts /app/docker-paas-build-app/scripts/
+COPY build-dockerfile.js /app/docker-paas-build-app/
 
 WORKDIR /app/docker-paas-build-app/scripts/
 #ENTRYPOINT [ "sh", "/app/docker-paas-build-app/entrypoint.sh" ]
