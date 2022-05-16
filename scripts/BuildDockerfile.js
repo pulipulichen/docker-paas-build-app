@@ -4,25 +4,7 @@ const unzipper = require('unzipper')
 
 const ShellExec = require('./lib/ShellExec.js')
 
-module.exports = async function (config) {
-
-  // 這是Gitlab CI Runner的路徑
-  const BUILD_DIR = path.join('/builds/', process.env.CI_PROJECT_NAMESPACE, process.env.CI_PROJECT_NAME)
-  process.chdir(BUILD_DIR)
-
-  const REPO = process.env.CI_PROJECT_NAME + '-' + process.env.CI_PROJECT_NAMESPACE
-  console.log("REPO: " + REPO)
-
-  let { USER, CMD } = config.app.Dockerfile
-  let { app_path, data_path } = config.app
-  let app_path_parent = path.dirname(app_path)
-  let system_user = USER
-
-  fs.mkdirSync('./build_tmp/')
-  await ShellExec(`echo build_tmp >> .dockerignore`)
-
-  // ------------------------------------
-  // 處理備份檔案問題
+function setupData ({BUILD_DIR}) {
 
   // 解壓縮
   // https://www.npmjs.com/package/unzipper
@@ -46,14 +28,20 @@ module.exports = async function (config) {
     }
   }
 
-  // ----------------------------------------------------
+  return {copyCmd, containerBackupFolder}
+}
+
+function setupUser (USER) {
   let setSystemUser = ''
   if (USER && USER !== 'root') {
     setSystemUser = `USER ${USER}`
   }
+  return setSystemUser
+}
 
-  // ----------------------------------------------------
-  // 建立 entrypoint.sh
+function buildEntrypoint ({config, BUILD_DIR}) {
+  let CMD = config.app.Dockerfile
+
   let script = fs.readFileSync('/app/docker-paas-build-app/scripts/entrypoint.sh', 'utf8')
 
   let scriptGitMode = `
@@ -70,7 +58,7 @@ if [ $\{GIT_MODE\} ]; then
   cd $CURRENT_DIR
 fi
 `
-  if (config.deploy.git_mode === 'true') {
+  if (config.deploy.git_mode === true) {
     script += scriptGitMode
   }
   
@@ -92,9 +80,10 @@ ${CMD}
   console.log('====================')
   console.log(script)
   console.log('====================\n\n')
+}
 
-  // ----------------------------------------------------
-  // Git
+function setupDockerfileCopy ({config}) {
+  let { app_path, data_path } = config.app
 
   const APP_GIT_URL = config.environment.build.app_git_url
   let REPO_NAME = APP_GIT_URL.slice(APP_GIT_URL.lastIndexOf('/') + 1)
@@ -124,16 +113,51 @@ RUN ln -s ${containerAppFolder}${REPO_NAME} ${app_path_parent}
 COPY app/ ${app_path}
 `
 
-  if (config.deploy.git_mode === 'true') {
+  if (config.deploy.git_mode === true) {
     dockerfileCopy = dockerfileAppGit
   }
 
+  return dockerfileCopy
+}
+
+// ----------------------------------------------------------------
+
+module.exports = async function (config) {
+
+  // 這是Gitlab CI Runner的路徑
+  const BUILD_DIR = path.join('/builds/', process.env.CI_PROJECT_NAMESPACE, process.env.CI_PROJECT_NAME)
+  process.chdir(BUILD_DIR)
+
+  const REPO = process.env.CI_PROJECT_NAME + '-' + process.env.CI_PROJECT_NAMESPACE
+  console.log("REPO: " + REPO)
+
+  let { USER, CMD } = config.app.Dockerfile
+  let { app_path, data_path } = config.app
+  let app_path_parent = path.dirname(app_path)
+  let system_user = USER
+
+  fs.mkdirSync('./build_tmp/')
+  await ShellExec(`echo build_tmp >> .dockerignore`)
+
+  // ------------------------------------
+  // 處理備份檔案問題
+  let {copyCmd, containerBackupFolder} = setupData({BUILD_DIR})
+
+  // ----------------------------------------------------
+  let setSystemUser = setupUser(USER)
+
+  // ----------------------------------------------------
+  // 建立 entrypoint.sh
+  buildEntrypoint({config, BUILD_DIR})
+
+  // ----------------------------------------------------
+  // Git
+
+  let dockerfileCopy = setupDockerfileCopy({config})
 
   // ------------------------
-  // Base Dockerfile
+  // Build Dockerfile
   let BaseDockerfile = fs.readFileSync(`./deploy/Dockerfile`, 'utf8')
-
-  // ------------------------
 
   let dockerfile = `${BaseDockerfile}
 

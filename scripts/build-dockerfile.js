@@ -31,10 +31,10 @@ const main = async function () {
   await AppCommitToGit(config)
   //await UnzipDatabasePVC(config)
 
-  if (config.deploy.git_mode !== true) {
+  //if (config.deploy.git_mode !== true) {
     await BuildDockerfile(config)
     await PushDockerfile(config)
-  }
+  //}
 }
 
 main()
