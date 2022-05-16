@@ -165,19 +165,21 @@ module.exports = async function (config) {
   // ------------------------
   // Build Dockerfile
   let BaseDockerfile = fs.readFileSync(`./deploy/Dockerfile`, 'utf8')
+  let TZ = config.environment.app.Dockerfile.TZ
 
   let dockerfile = `${BaseDockerfile}
 
 # Timezone
 ENV DEBIAN_FRONTEND=noninteractive
-ENV TZ=Asia/Taipei
+ENV TZ=${TZ}
 RUN apt-get update \
     && apt-get install -y --no-install-recommends tzdata
     
-RUN TZ=Asia/Taipei \
+RUN TZ=${TZ} \
     && ln -snf /usr/share/zoneinfo/$TZ /etc/localtime \
     && echo $TZ > /etc/timezone \
     && dpkg-reconfigure -f noninteractive tzdata 
+ENV TIMEZONE=${TZ}
 
 # WEBSSH
 RUN apt update
