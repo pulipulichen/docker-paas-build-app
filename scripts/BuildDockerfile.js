@@ -165,7 +165,7 @@ module.exports = async function (config) {
   // ------------------------
   // Build Dockerfile
   let BaseDockerfile = fs.readFileSync(`./deploy/Dockerfile`, 'utf8')
-  let TZ = config.environment.app.Dockerfile.TZ
+  let TZ = config.environment.app.app.Dockerfile.TZ
 
   let dockerfile = `${BaseDockerfile}
 
