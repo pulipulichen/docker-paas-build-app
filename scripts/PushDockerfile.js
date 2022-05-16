@@ -55,4 +55,6 @@ module.exports = async function (config) {
   console.log('============================================================')
   console.log(`APP TAG UPDATED: ${TAG}`)
   console.log('============================================================')
+  
+  return TAG
 }

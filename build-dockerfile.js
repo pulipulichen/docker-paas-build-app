@@ -33,9 +33,10 @@ const main = async function () {
   await AppCommitToGit(config)
   //await UnzipDatabasePVC(config)
 
-  if (config.deploy.git_mode !== true) {
+  if (config.deploy.only_update_app !== true) {
     await BuildDockerfile(config)
-    await PushDockerfile(config)
+    let tag = await PushDockerfile(config)
+    await UpdateDeployTag(config, tag)
   }
   else {
     const appName = process.env.CI_PROJECT_NAME + '-' + process.env.CI_PROJECT_NAMESPACE

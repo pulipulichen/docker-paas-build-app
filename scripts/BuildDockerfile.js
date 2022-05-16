@@ -58,7 +58,7 @@ if [ $\{GIT_MODE\} ]; then
   cd $CURRENT_DIR
 fi
 `
-  if (config.deploy.git_mode === true) {
+  if (config.deploy.only_update_app === true) {
     script += scriptGitMode
   }
   
@@ -117,7 +117,7 @@ RUN mv ${app_path_parent}/${REPO_NAME} ${app_path_parent}/${app_path_basename}
 COPY app/ ${app_path}
 `
 
-  if (config.deploy.git_mode === true) {
+  if (config.deploy.only_update_app === true) {
     dockerfileCopy = dockerfileAppGit
   }
 
