@@ -82,7 +82,7 @@ ${CMD}
   console.log('====================\n\n')
 }
 
-function setupDockerfileCopy ({config}) {
+function setupDockerfileCopy ({config, REPO}) {
   let { app_path, data_path } = config.app
 
   const APP_GIT_URL = config.environment.build.app_git_url
@@ -153,7 +153,7 @@ module.exports = async function (config) {
   // ----------------------------------------------------
   // Git
 
-  let dockerfileCopy = setupDockerfileCopy({config})
+  let dockerfileCopy = setupDockerfileCopy({config, REPO})
 
   // ------------------------
   // Build Dockerfile
