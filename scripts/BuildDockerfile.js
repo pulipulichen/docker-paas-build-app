@@ -184,7 +184,7 @@ WORKDIR ${app_path}
 # USER 一定要最後設定
 ${setSystemUser}
 
-RUN echo ${new Date()}
+RUN echo "${new Date()}"
 `
   
   console.log('====================')
