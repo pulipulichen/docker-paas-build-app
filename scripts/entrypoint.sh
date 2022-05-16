@@ -21,7 +21,6 @@ if [ -d "/paas_data/app/" ]; then
   if [ "$(ls $DATA_PATH)" ]; then
     echo "$DATA_PATH is not empty."
   else
-    ls /paas_data/app/
     cp -arf /paas_data/app/* $DATA_PATH
     echo "Data is restored."
   fi

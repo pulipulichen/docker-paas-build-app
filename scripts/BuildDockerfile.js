@@ -4,7 +4,7 @@ const unzipper = require('unzipper')
 
 const ShellExec = require('./lib/ShellExec.js')
 
-function setupData ({BUILD_DIR, system_user}) {
+async function setupData ({BUILD_DIR, system_user}) {
 
   // 解壓縮
   // https://www.npmjs.com/package/unzipper
@@ -20,7 +20,7 @@ function setupData ({BUILD_DIR, system_user}) {
   let copyCmd = ''
   if (fs.existsSync(zipPath)) {
 
-    fs.createReadStream(zipPath)
+    await fs.createReadStream(zipPath)
       .pipe(unzipper.Extract({ path: targetDir }))
     
     console.log('Unzip app.zip to', targetDir)
@@ -149,7 +149,7 @@ module.exports = async function (config) {
 
   // ------------------------------------
   // 處理備份檔案問題
-  let {copyCmd} = setupData({BUILD_DIR, system_user})
+  let {copyCmd} = await setupData({BUILD_DIR, system_user})
 
   // ----------------------------------------------------
   let setSystemUser = setupUser(USER)
@@ -206,6 +206,7 @@ WORKDIR ${app_path}
 # USER 一定要最後設定
 ${setSystemUser}
 
+# 確保每次都能更新
 RUN echo "${new Date()}"
 `
   

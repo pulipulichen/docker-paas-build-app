@@ -49,8 +49,8 @@ module.exports = async function (config) {
   await ShellExec(`docker build -f ./build_tmp/Dockerfile -t ${QUAY_PREFIX}/${REPO}:${TAG} .`)
   await ShellExec(`docker push ${QUAY_PREFIX}/${REPO}:${TAG}`)
 
-  fs.mkdirSync('./ci.tmp/')
-  fs.writeFileSync('./ci.tmp/TAG_APP.txt', TAG, 'utf8')
+  // fs.mkdirSync('./ci.tmp/')
+  // fs.writeFileSync('./ci.tmp/TAG_APP.txt', TAG, 'utf8')
 
   console.log('============================================================')
   console.log(`APP TAG UPDATED: ${TAG}`)
