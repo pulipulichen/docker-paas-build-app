@@ -40,7 +40,7 @@ function setupUser (USER) {
 }
 
 function buildEntrypoint ({config, BUILD_DIR}) {
-  let CMD = config.app.Dockerfile
+  let {CMD} = config.app.Dockerfile
 
   let script = fs.readFileSync('/app/docker-paas-build-app/scripts/entrypoint.sh', 'utf8')
 
