@@ -31,9 +31,20 @@ const main = async function () {
     return
   }
 
-  await BuildDockerfile(config)
-  let tag = await PushDockerfile(config)
-  await UpdateDeployTag(config, tag)
+  if (config.deploy.only_update_app !== true) {
+    return false
+  }
+
+  await AppCommitToGit(config)
+  //await UnzipDatabasePVC(config)
+  
+  const appName = process.env.CI_PROJECT_NAME + '-' + process.env.CI_PROJECT_NAMESPACE
+  if (!appName || appName === '-') {
+    throw Error('App name should be specified.')
+    process.exit()
+  }
+  const token = await ArgocdHelpers.getCookieToken()
+  await ArgocdHelpers.restartResource(appName, token, 'app')
 }
 
 main()
