@@ -17,6 +17,7 @@ const BuildDockerfile = require('./scripts/BuildDockerfile.js')
 const PushDockerfile = require('./scripts/PushDockerfile.js')
 
 const ArgocdHelpers = require('./scripts/argocd/ArgocdHelpers.js')
+const UpdateDeployTag = require('./scripts/UpdateDeployTag.js')
 
 const main = async function () {
   // if (config.backup.persist_data === true) {
