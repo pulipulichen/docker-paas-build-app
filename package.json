@@ -1,6 +1,7 @@
 {
   "scripts": {
-    "build-push": "./build-push.sh"
+    "build-push": "./build-push.sh",
+    "build-bash": "docker-compose build; docker-compose run app bash"
   },
   "dependencies": {
     "js-yaml": "4.1.0",

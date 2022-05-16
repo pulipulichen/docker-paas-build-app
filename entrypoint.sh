@@ -4,3 +4,4 @@ rm -rf *
 git reset --hard
 git pull
 cd $CURRENT_DIR
+ls

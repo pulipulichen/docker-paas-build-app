@@ -29,13 +29,15 @@ WORKDIR /app/docker-paas-build-app
 COPY package.json /app/docker-paas-build-app/
 COPY entrypoint.sh /app/docker-paas-build-app/
 
+RUN echo "20220516-2112"
 RUN npm i
+#RUN npm i -g js-yaml
 
 #RUN mkdir -p /app/scripts
 #WORKDIR /app/scripts
 COPY scripts /app/docker-paas-build-app/scripts/
 COPY build-dockerfile.js /app/docker-paas-build-app/
 
-WORKDIR /app/docker-paas-build-app/scripts/
+WORKDIR /app/docker-paas-build-app/
 #ENTRYPOINT [ "sh", "/app/docker-paas-build-app/entrypoint.sh" ]
 
