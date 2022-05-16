@@ -53,7 +53,7 @@ if [ $\{GIT_MODE\} ]; then
 
   cd /paas_app/app/
   git reset --hard
-  git pull
+  git pull origin
 
   cd $CURRENT_DIR
 fi
@@ -85,6 +85,7 @@ ${CMD}
 function setupDockerfileCopy ({config, REPO}) {
   let { app_path } = config.app
   let app_path_parent = path.dirname(app_path)
+  let app_path_basename = path.basename(app_path)
 
   const APP_GIT_URL = config.environment.build.app_git_url
   let REPO_NAME = APP_GIT_URL.slice(APP_GIT_URL.lastIndexOf('/') + 1)
@@ -108,6 +109,7 @@ RUN git checkout -b ${REPO} || git checkout ${REPO}
 # APP
 RUN rm -rf ${app_path}
 RUN ln -s ${containerAppFolder}${REPO_NAME} ${app_path_parent}
+RUN mv ${app_path_parent}/${REPO_NAME} ${app_path_parent}/${app_path_basename}
 `
 
   let dockerfileCopy = `
