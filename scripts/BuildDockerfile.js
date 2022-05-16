@@ -39,7 +39,7 @@ function setupUser (USER) {
   return setSystemUser
 }
 
-function buildEntrypoint ({config, BUILD_DIR}) {
+function buildEntrypoint ({config, BUILD_DIR, REPO}) {
   let {CMD} = config.app.Dockerfile
 
   let script = fs.readFileSync('/app/docker-paas-build-app/scripts/entrypoint.sh', 'utf8')
@@ -53,7 +53,7 @@ if [ $\{GIT_MODE\} ]; then
 
   cd /paas_app/app/
   git reset --hard
-  git pull origin
+  git pull origin ${REPO}
 
   cd $CURRENT_DIR
 fi
@@ -150,7 +150,7 @@ module.exports = async function (config) {
 
   // ----------------------------------------------------
   // 建立 entrypoint.sh
-  buildEntrypoint({config, BUILD_DIR})
+  buildEntrypoint({config, BUILD_DIR, REPO})
 
   // ----------------------------------------------------
   // Git
