@@ -25,7 +25,8 @@ function setupData ({BUILD_DIR, system_user}) {
     
     console.log('Unzip app.zip to', targetDir)
 
-    copyCmd = `COPY ${targetDir} ${containerBackupFolder}`
+    copyCmd = `COPY ${targetDir} ${containerBackupFolder}
+RUN chmod -R 777 ${containerBackupFolder}/*`
 
     if (system_user) {
       copyCmd += `\nRUN chown ${system_user}:${system_user} -R ${containerBackupFolder}`
