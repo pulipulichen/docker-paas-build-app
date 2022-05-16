@@ -23,4 +23,6 @@ if [ -d "/paas-data/app/" ]; then
     cp -rf "/paas-data/app/*" -d $DATA_PATH
     echo "Data is restored."
   fi
+else
+  echo "Data folder is not existing. /paas-data/app/"
 fi

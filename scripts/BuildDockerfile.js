@@ -148,7 +148,7 @@ module.exports = async function (config) {
 
   // ------------------------------------
   // 處理備份檔案問題
-  let {copyCmd, containerBackupFolder} = setupData({BUILD_DIR, system_user})
+  let {copyCmd} = setupData({BUILD_DIR, system_user})
 
   // ----------------------------------------------------
   let setSystemUser = setupUser(USER)
@@ -166,6 +166,7 @@ module.exports = async function (config) {
   // Build Dockerfile
   let BaseDockerfile = fs.readFileSync(`./deploy/Dockerfile`, 'utf8')
   let TZ = config.environment.app.app.Dockerfile.TZ
+  let containerEntrypointFolder = '/paas_data/'
 
   let dockerfile = `${BaseDockerfile}
 
@@ -194,10 +195,10 @@ ${copyCmd}
 ${dockerfileCopy}
 
 # ENTRYPOINT
-COPY build_tmp/entrypoint.sh ${containerBackupFolder}
-RUN chmod 777 ${containerBackupFolder}entrypoint.sh
+COPY build_tmp/entrypoint.sh ${containerEntrypointFolder}
+RUN chmod 777 ${containerEntrypointFolder}entrypoint.sh
 
-CMD ["sh", "${containerBackupFolder}entrypoint.sh"]
+CMD ["sh", "${containerEntrypointFolder}entrypoint.sh"]
 
 WORKDIR ${app_path}
 
