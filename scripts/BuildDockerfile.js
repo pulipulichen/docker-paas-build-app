@@ -98,7 +98,7 @@ function setupDockerfileCopy ({config, REPO}) {
 ENV GIT_MODE=true
 RUN mkdir ${containerAppFolder}
 WORKDIR ${containerAppFolder}
-RUN git clone ${APP_GIT_URL}
+RUN git clone --no-checkout ${APP_GIT_URL}
 
 WORKDIR ${containerAppFolder}${REPO_NAME}/
 RUN git config --global user.email "${username}@${host}"
@@ -183,6 +183,8 @@ WORKDIR ${app_path}
 
 # USER 一定要最後設定
 ${setSystemUser}
+
+RUN echo ${new Date()}
 `
   
   console.log('====================')
