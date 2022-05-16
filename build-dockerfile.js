@@ -1,7 +1,7 @@
 const fs = require('fs')
 const path = require('path')
 
-const LoadYAMLConfig = require('./lib/LoadYAMLConfig.js')
+const LoadYAMLConfig = require('./scripts/lib/LoadYAMLConfig.js')
 
 
 // const BUILD_DIR = path.join('/webapp-build/', process.env.CI_PROJECT_NAMESPACE, process.env.CI_PROJECT_NAME)
@@ -12,9 +12,11 @@ const LoadYAMLConfig = require('./lib/LoadYAMLConfig.js')
 // }
 
 //const UnzipDatabasePVC = require('./lib/UnzipDatabasePVC.js')
-const AppCommitToGit = require('./AppCommitToGit.js')
-const BuildDockerfile = require('./BuildDockerfile.js')
-const PushDockerfile = require('./PushDockerfile.js')
+const AppCommitToGit = require('./scripts/AppCommitToGit.js')
+const BuildDockerfile = require('./scripts/BuildDockerfile.js')
+const PushDockerfile = require('./scripts/PushDockerfile.js')
+
+const ArgocdHelpers = require('./scripts/argocd/ArgocdHelpers.js')
 
 const main = async function () {
   // if (config.backup.persist_data === true) {
@@ -34,6 +36,15 @@ const main = async function () {
   if (config.deploy.git_mode !== true) {
     await BuildDockerfile(config)
     await PushDockerfile(config)
+  }
+  else {
+    const appName = process.env.CI_PROJECT_NAME + '-' + process.env.CI_PROJECT_NAMESPACE
+    if (!appName || appName === '-') {
+      throw Error('App name should be specified.')
+      process.exit()
+    }
+    const token = await ArgocdHelpers.getCookieToken()
+    await ArgocdHelpers.restartResource(appName, token, 'app')
   }
 }
 

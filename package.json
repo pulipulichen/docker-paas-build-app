@@ -5,6 +5,7 @@
   "dependencies": {
     "js-yaml": "4.1.0",
     "unzipper": "0.10.11",
-    "fast-glob": "3.2.11"
+    "fast-glob": "3.2.11",
+    "node-fetch": "2.0.0"
   }
 }
