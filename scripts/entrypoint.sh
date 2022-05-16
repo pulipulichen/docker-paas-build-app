@@ -6,6 +6,8 @@ if [ \( ${APP_USERNAME} \) -o \( ${AUTH_PASSWORD} \) ]; then
   echo "[WEBSSH] Username and password updated."
 fi
 
+/etc/init.d/ssh start
+
 # =================================
 # Data Reset
 
