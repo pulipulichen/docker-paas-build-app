@@ -8,7 +8,7 @@ function setupData ({BUILD_DIR, system_user}) {
 
   // 解壓縮
   // https://www.npmjs.com/package/unzipper
-  let targetDir = `${BUILD_DIR}/build_tmp/data`
+  let targetDir = `./build_tmp/data`
   let containerBackupFolder = '/paas_data/'
 
   if (fs.existsSync(targetDir)) {
@@ -19,8 +19,12 @@ function setupData ({BUILD_DIR, system_user}) {
   let zipPath = `${BUILD_DIR}/data/app.zip`
   let copyCmd = ''
   if (fs.existsSync(zipPath)) {
+
     fs.createReadStream(zipPath)
       .pipe(unzipper.Extract({ path: targetDir }))
+    
+    console.log('Unzip app.zip to', targetDir)
+
     copyCmd = `COPY ${targetDir} ${containerBackupFolder}`
 
     if (system_user) {
@@ -48,7 +52,7 @@ function buildEntrypoint ({config, BUILD_DIR, REPO}) {
 # =================================
 # Git Reset
 
-if [ $\{GIT_MODE\} ]; then
+#if [ $\{GIT_MODE\} ]; then
   CURRENT_DIR=\`pwd\`
 
   cd /paas_app/app/
@@ -56,7 +60,7 @@ if [ $\{GIT_MODE\} ]; then
   git pull origin ${REPO}
 
   cd $CURRENT_DIR
-fi
+#fi
 `
   if (config.deploy.only_update_app === true) {
     script += scriptGitMode
@@ -96,7 +100,7 @@ function setupDockerfileCopy ({config, REPO}) {
 
   let dockerfileAppGit = `
 # APP GIT
-ENV GIT_MODE=true
+#ENV GIT_MODE=true
 RUN mkdir ${containerAppFolder}
 WORKDIR ${containerAppFolder}
 RUN git clone --no-checkout ${APP_GIT_URL}
@@ -163,6 +167,9 @@ module.exports = async function (config) {
   let BaseDockerfile = fs.readFileSync(`./deploy/Dockerfile`, 'utf8')
 
   let dockerfile = `${BaseDockerfile}
+
+# Timezone
+ENV TZ=Asia/Taipei
 
 # WEBSSH
 RUN apt update

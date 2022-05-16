@@ -1,4 +1,3 @@
-echo `cat /paas_data/entrypoint.sh`
 
 # =================================
 # WEBSSH
