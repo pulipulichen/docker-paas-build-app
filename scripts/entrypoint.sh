@@ -16,11 +16,11 @@ if [ ${RESET_DATA} ]; then
   rm -rf ${DATA_PATH}/*  
 fi
 
-if [ -d /paas-data/ ]; then
+if [ -d "/paas-data/app/" ]; then
   if [ "$(ls -A $DATA_PATH)" ]; then
     echo "$DATA_PATH is not empty."
   else
-    cp -rf /paas-data/* -d $DATA_PATH
+    cp -rf "/paas-data/app/*" -d $DATA_PATH
     echo "Data is restored."
   fi
 fi
