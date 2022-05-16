@@ -14,10 +14,11 @@ fi
 
 if [ ${RESET_DATA} ]; then
   rm -rf ${DATA_PATH}/*  
+  echo "Data is reseted."
 fi
 
 if [ -d "/paas_data/app/" ]; then
-  if [ "$(ls -A $DATA_PATH)" ]; then
+  if [ "$(ls $DATA_PATH)" ]; then
     echo "$DATA_PATH is not empty."
   else
     cp -rf "/paas_data/app/*" -d $DATA_PATH
