@@ -29,7 +29,7 @@ async function getTag(config) {
 async function main (config, tag) {
 
   let tmpGitPath = '/tmp/git-deploy'
-  fs.mkdirSync(tmtmpGitPathpDir, { recursive: true})
+  fs.mkdirSync(tmpGitPath, { recursive: true})
   process.chdir(tmpGitPath)
 
   const REPO = process.env.CI_PROJECT_NAME + '-' + process.env.CI_PROJECT_NAMESPACE

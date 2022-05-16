@@ -29,7 +29,6 @@ WORKDIR /app/docker-paas-build-app
 COPY package.json /app/docker-paas-build-app/
 COPY entrypoint.sh /app/docker-paas-build-app/
 
-RUN echo "20220516-2112"
 RUN npm i
 #RUN npm i -g js-yaml
 
