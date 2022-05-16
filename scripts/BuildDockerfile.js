@@ -105,7 +105,7 @@ WORKDIR ${containerAppFolder}${REPO_NAME}/
 RUN git config --global user.email "${username}@${host}"
 RUN git config --global user.name "${username}"
 RUN git checkout -b ${REPO} || git checkout ${REPO}
-RUN git config pull.rebase true
+RUN git config --global pull.rebase true
 
 # APP
 RUN rm -rf ${app_path}
