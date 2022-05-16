@@ -4,7 +4,7 @@ const unzipper = require('unzipper')
 
 const ShellExec = require('./lib/ShellExec.js')
 
-function setupData ({BUILD_DIR}) {
+function setupData ({BUILD_DIR, system_user}) {
 
   // 解壓縮
   // https://www.npmjs.com/package/unzipper
@@ -83,7 +83,8 @@ ${CMD}
 }
 
 function setupDockerfileCopy ({config, REPO}) {
-  let { app_path, data_path } = config.app
+  let { app_path } = config.app
+  let app_path_parent = path.dirname(app_path)
 
   const APP_GIT_URL = config.environment.build.app_git_url
   let REPO_NAME = APP_GIT_URL.slice(APP_GIT_URL.lastIndexOf('/') + 1)
@@ -133,7 +134,6 @@ module.exports = async function (config) {
 
   let { USER, CMD } = config.app.Dockerfile
   let { app_path, data_path } = config.app
-  let app_path_parent = path.dirname(app_path)
   let system_user = USER
 
   fs.mkdirSync('./build_tmp/')
@@ -141,7 +141,7 @@ module.exports = async function (config) {
 
   // ------------------------------------
   // 處理備份檔案問題
-  let {copyCmd, containerBackupFolder} = setupData({BUILD_DIR})
+  let {copyCmd, containerBackupFolder} = setupData({BUILD_DIR, system_user})
 
   // ----------------------------------------------------
   let setSystemUser = setupUser(USER)
