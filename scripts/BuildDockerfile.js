@@ -4,6 +4,16 @@ const unzipper = require('unzipper')
 
 const ShellExec = require('./lib/ShellExec.js')
 
+async function unzip(zipPath, targetDir) {
+  return new Promise(resolve => {
+    fs.createReadStream(zipPath)
+      .pipe(unzipper.Extract({ path: targetDir }))
+      .on('close', () => {
+        resolve()
+      })
+  })
+}
+
 async function setupData ({BUILD_DIR, system_user}) {
 
   // 解壓縮
@@ -20,8 +30,7 @@ async function setupData ({BUILD_DIR, system_user}) {
   let copyCmd = ''
   if (fs.existsSync(zipPath)) {
 
-    await fs.createReadStream(zipPath)
-      .pipe(unzipper.Extract({ path: targetDir }))
+    await unzip(zipPath, targetDir)
     
     console.log('Unzip app.zip to', targetDir)
 
