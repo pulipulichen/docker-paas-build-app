@@ -6,7 +6,7 @@
 const ShellExec = require('./lib/ShellExec.js')
 const fs = require('fs')
 const path = require('path')
-const LoadYAMLConfig = require('./lib/loadYAMLConfig.js')
+const LoadYAMLConfig = require('./lib/LoadYAMLConfig.js')
 
 function getTagPrefix(config) {
   let prefix = config.deploy.docker_image_tag_prefix

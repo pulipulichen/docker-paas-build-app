@@ -22,7 +22,7 @@ module.exports = async function () {
   const valuesStr = fs.readFileSync(valuesPath, 'utf8')
   //console.log(valuesStr)
   const config = yaml.load(valuesStr)
-  */
+  */ 
   const entries = await fg([
     path.join(BUILD_DIR, 'deploy/values.yaml'), 
     path.join(BUILD_DIR, 'config/**/*.yaml'), 
