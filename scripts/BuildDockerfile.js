@@ -157,6 +157,18 @@ async function setupQuay (config) {
 
 }
 
+function filterDockerfile(dockerfile) {
+  let lines = dockerfile.split('\n')
+
+  return lines.filter(line => {
+    line = line.trim()
+    if (line.startsWith('COPY app/') || 
+      line.startsWith('COPY ./app/')) {
+
+    }
+  })
+}
+
 // ----------------------------------------------------------------
 
 module.exports = async function (config) {
@@ -195,6 +207,9 @@ module.exports = async function (config) {
   // ------------------------
   // Build Dockerfile
   let BaseDockerfile = fs.readFileSync(`./config/Dockerfile`, 'utf8')
+
+  //BaseDockerfile = filterDockerfile(BaseDockerfile)
+
   let TZ = config.environment.app.app.Dockerfile.TZ
   let containerEntrypointFolder = '/paas_data/'
 
