@@ -59,9 +59,8 @@ module.exports = async function (config) {
   // ------------------------
   
   let QUAY_PREFIX = config.environment.build.quay_prefix
+  await setupQuay()  
   await ShellExec(`docker build -f ./build_tmp/Dockerfile -t ${QUAY_PREFIX}/${REPO}:app-${TAG} .`)
-
-  await setupQuay()
   await ShellExec(`docker push ${QUAY_PREFIX}/${REPO}:app-${TAG}`)
 
   // fs.mkdirSync('./ci.tmp/')
