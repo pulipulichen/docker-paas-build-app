@@ -152,7 +152,7 @@ async function setupQuay (config) {
     "auth": config.environment.build.quay_auth_token,
     "email": ""
   }
-  fs.writeFileSync(process.env('HOME') + '/.docker/config.json', JSON.stringify(token), 'utf8')
+  fs.writeFileSync(process.env['HOME'] + '/.docker/config.json', JSON.stringify(token), 'utf8')
   //await ShellExec(`mv /tmp/config.json ~/.docker/`)
 
 }
