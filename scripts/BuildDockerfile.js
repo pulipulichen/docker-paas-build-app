@@ -109,6 +109,10 @@ function setupDockerfileCopy ({config, REPO}) {
   let containerAppFolder = '/paas_app/'
 
   let dockerfileAppGit = `
+
+# APP
+RUN rm -rf ${app_path}
+
 # APP GIT
 #ENV GIT_MODE=true
 RUN mkdir -p ${containerAppFolder}
@@ -122,7 +126,6 @@ RUN git checkout -b ${REPO} || git checkout ${REPO}
 RUN git config --global pull.rebase true
 
 # APP
-RUN rm -rf ${app_path}
 RUN ln -s ${containerAppFolder}${REPO_NAME} ${app_path_parent}
 RUN mv ${app_path_parent}/${REPO_NAME} ${app_path_parent}/${app_path_basename}
 `
