@@ -6,6 +6,7 @@
 const ShellExec = require('./lib/ShellExec.js')
 const fs = require('fs')
 const path = require('path')
+const LoadYAMLConfig = require('./lib/loadYAMLConfig.js')
 
 function getTagPrefix(config) {
   let prefix = config.deploy.docker_image_tag_prefix
@@ -19,6 +20,26 @@ function getTagPrefix(config) {
 
   return prefix
 }
+
+async function setupQuay () {
+  let config = await LoadYAMLConfig()
+  // ----------------------------------------------------------------
+  // setup QUAY token
+
+  //fs.mkdirSync('~/.docker')
+  await ShellExec(`mkdir -p ~/.docker`) 
+  let token = {
+    "auths": {}
+  }
+  token.auths[config.environment.build.quay_auth_host] = {
+    "auth": config.environment.build.quay_auth_token,
+    "email": ""
+  }
+  fs.writeFileSync(process.env['HOME'] + '/.docker/config.json', JSON.stringify(token), 'utf8')
+  //await ShellExec(`mv /tmp/config.json ~/.docker/`)
+
+}
+
 
 module.exports = async function (config) {
   if (fs.existsSync('./build_tmp/Dockerfile') === false) {
@@ -39,6 +60,8 @@ module.exports = async function (config) {
   
   let QUAY_PREFIX = config.environment.build.quay_prefix
   await ShellExec(`docker build -f ./build_tmp/Dockerfile -t ${QUAY_PREFIX}/${REPO}:app-${TAG} .`)
+
+  await setupQuay()
   await ShellExec(`docker push ${QUAY_PREFIX}/${REPO}:app-${TAG}`)
 
   // fs.mkdirSync('./ci.tmp/')
