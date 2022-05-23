@@ -111,7 +111,7 @@ function setupDockerfileCopy ({config, REPO}) {
   let dockerfileAppGit = `
 # APP GIT
 #ENV GIT_MODE=true
-RUN mkdir ${containerAppFolder}
+RUN mkdir -p ${containerAppFolder}
 WORKDIR ${containerAppFolder}
 RUN git clone --no-checkout ${APP_GIT_URL}
 
