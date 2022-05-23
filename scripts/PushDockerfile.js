@@ -37,6 +37,7 @@ async function setupQuay () {
   }
   fs.writeFileSync(process.env['HOME'] + '/.docker/config.json', JSON.stringify(token), 'utf8')
   //await ShellExec(`mv /tmp/config.json ~/.docker/`)
+  await ShellExec(`cat ~/.docker/config.json`)
 
 }
 
