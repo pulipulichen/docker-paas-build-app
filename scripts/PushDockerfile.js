@@ -9,7 +9,7 @@ const path = require('path')
 const LoadYAMLConfig = require('./lib/LoadYAMLConfig.js')
 
 function getTagPrefix(config) {
-  let prefix = config.deploy.docker_image_tag_prefix
+  let prefix = config.deploy.tag_prefix
 
   if (!prefix) {
     return
