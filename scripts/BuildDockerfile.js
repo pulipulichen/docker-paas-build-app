@@ -113,7 +113,7 @@ function setupDockerfileCopy ({config, REPO}) {
 #ENV GIT_MODE=true
 RUN mkdir -p ${containerAppFolder}
 WORKDIR ${containerAppFolder}
-RUN git clone --no-checkout ${APP_GIT_URL}
+RUN git clone --no-checkout ${APP_GIT_URL} || echo "git is existed"
 
 WORKDIR ${containerAppFolder}${REPO_NAME}/
 RUN git config --global user.email "${username}@${host}"
