@@ -40,8 +40,16 @@ module.exports = async function (config) {
 
   //fs.mkdirSync('~/.docker')
   await ShellExec(`mkdir -p ~/.docker`) 
-  await ShellExec(`cp ./deploy/token/quay-token.json ~/.docker/config.json`)
-  
+  let token = {
+    "auths": {}
+  }
+  token.auths[config.environment.build.quay_auth_host] = {
+    "auth": config.environment.build.quay_auth_token,
+    "email": ""
+  }
+  fs.writeFileSync('/tmp/config.json', JSON.stringify(token), 'utf8')
+  await ShellExec(`mv /tmp/config.json ~/.docker/`)
+
   // ------------------------
   
   let QUAY_PREFIX = config.environment.build.quay_prefix
