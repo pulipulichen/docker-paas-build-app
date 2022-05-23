@@ -174,7 +174,7 @@ module.exports = async function (config) {
 
   // ------------------------
   // Build Dockerfile
-  let BaseDockerfile = fs.readFileSync(`./deploy/Dockerfile`, 'utf8')
+  let BaseDockerfile = fs.readFileSync(`./config/Dockerfile`, 'utf8')
   let TZ = config.environment.app.app.Dockerfile.TZ
   let containerEntrypointFolder = '/paas_data/'
 
