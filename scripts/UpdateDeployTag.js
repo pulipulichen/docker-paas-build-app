@@ -36,7 +36,7 @@ async function main (config, tag) {
   console.log("REPO: " + REPO)
 
   const DEPLOY_GIT_URL = config.environment.build.deploy_git_url
-  await ShellExec(`git clone -b ${REPO} ${DEPLOY_GIT_URL}`)
+  await ShellExec(`git clone -b ${REPO} ${DEPLOY_GIT_URL} || git clone ${DEPLOY_GIT_URL}`)
 
   const REPO_NAME = getRepoName(config)
   process.chdir(tmpGitPath + '/' + REPO_NAME)
