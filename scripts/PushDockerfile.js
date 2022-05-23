@@ -26,8 +26,7 @@ module.exports = async function (config) {
     return false
   }
 
-  let REPO = process.env.CI_PROJECT_NAME + '-' + process.env.CI_PROJECT_NAMESPACE + 
-             '-app'
+  let REPO = process.env.CI_PROJECT_NAME + '-' + process.env.CI_PROJECT_NAMESPACE
   console.log(`QUAY REPO: ${REPO}`)
 
   let TAG = process.env.CI_COMMIT_SHORT_SHA
@@ -46,14 +45,14 @@ module.exports = async function (config) {
   // ------------------------
   
   let QUAY_PREFIX = config.environment.build.quay_prefix
-  await ShellExec(`docker build -f ./build_tmp/Dockerfile -t ${QUAY_PREFIX}/${REPO}:${TAG} .`)
-  await ShellExec(`docker push ${QUAY_PREFIX}/${REPO}:${TAG}`)
+  await ShellExec(`docker build -f ./build_tmp/Dockerfile -t ${QUAY_PREFIX}/${REPO}:app-${TAG} .`)
+  await ShellExec(`docker push ${QUAY_PREFIX}/${REPO}:app-${TAG}`)
 
   // fs.mkdirSync('./ci.tmp/')
   // fs.writeFileSync('./ci.tmp/TAG_APP.txt', TAG, 'utf8')
 
   console.log('============================================================')
-  console.log(`APP TAG UPDATED: ${TAG}`)
+  console.log(`APP TAG UPDATED: app-${TAG}`)
   console.log('============================================================')
   
   return TAG
