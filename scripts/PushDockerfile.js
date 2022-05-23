@@ -35,21 +35,6 @@ module.exports = async function (config) {
     TAG = prefix + '-' + TAG
   }
 
-  // ----------------------------------------------------------------
-  // setup QUAY token
-
-  //fs.mkdirSync('~/.docker')
-  await ShellExec(`mkdir -p ~/.docker`) 
-  let token = {
-    "auths": {}
-  }
-  token.auths[config.environment.build.quay_auth_host] = {
-    "auth": config.environment.build.quay_auth_token,
-    "email": ""
-  }
-  fs.writeFileSync('/tmp/config.json', JSON.stringify(token), 'utf8')
-  await ShellExec(`mv /tmp/config.json ~/.docker/`)
-
   // ------------------------
   
   let QUAY_PREFIX = config.environment.build.quay_prefix
