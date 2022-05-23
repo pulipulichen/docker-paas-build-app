@@ -25,7 +25,7 @@ module.exports = async function () {
   */
   const entries = await fg([
     path.join(BUILD_DIR, 'deploy/values.yaml'), 
-    path.join(BUILD_DIR, 'deploy/values/**/*.yaml'), 
+    path.join(BUILD_DIR, 'config/**/*.yaml'), 
   ], { dot: true });
 
   let config = {}
