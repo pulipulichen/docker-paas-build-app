@@ -30,6 +30,7 @@ async function setupQuay () {
 
 }
 
+const BUILD_DIR = path.join('/builds/', process.env.CI_PROJECT_NAMESPACE, process.env.CI_PROJECT_NAME)
 
 module.exports = async function (config) {
   if (fs.existsSync('./build_tmp/Dockerfile') === false) {

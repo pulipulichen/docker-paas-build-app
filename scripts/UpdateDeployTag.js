@@ -64,6 +64,9 @@ async function push (config) {
   let tag = await BuildTag()
   fs.writeFileSync('TAG_APP.txt', tag, 'utf8')
 
+  await ShellExec(`pwd`)
+  await ShellExec(`ls`)
+
   // ----------------------------------------------------------------
 
   await ShellExec(`git add .`)
