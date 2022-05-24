@@ -1,6 +1,9 @@
 const { exec } = require("child_process")
 
 module.exports = function (cmd, stderrHandler, errorHandler) {
+  if (Array.isArray(cmd)) {
+    cmd = cmd.join(' && ')
+  }
 
   if (typeof(stderrHandler) !== 'function') {
     stderrHandler = function (stderr) {

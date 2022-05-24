@@ -70,12 +70,17 @@ async function push (config) {
 
   await ShellExec(`pwd`)
   await ShellExec(`ls`)
+  console.log(tmpGitPath + '/' + REPO_NAME, fs.existsSync(tmpGitPath + '/' + REPO_NAME))
+  await ShellExec(`ls ${tmpGitPath + '/' + REPO_NAME}`)
 
   // ----------------------------------------------------------------
 
-  await ShellExec(`git add .`)
-  await ShellExec(`git commit -m "CI TAG: ${tag}" --allow-empty`)
-  await ShellExec(`git push -f ${DEPLOY_GIT_URL}`)
+  await ShellExec([
+    `cd ${tmpGitPath + '/' + REPO_NAME}`, 
+    `git add .`,
+    `git commit -m "CI TAG: ${tag}" --allow-empty`,
+    `git push -f ${DEPLOY_GIT_URL}`
+  ])
 }
 
 module.exports = {
