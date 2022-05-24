@@ -91,7 +91,7 @@ push
 
   let createForceDeployCMD = `echo "${tag}" > FORCE_DEPLOY.txt`
 
-  let lastTag = fs.readFileSync('TAG_APP.txt', 'utf8')
+  let lastTag = fs.readFileSync(path.join(tmpGitPath + '/' + REPO_NAME, 'TAG_APP.txt'), 'utf8')
   let lastTagIsGit = lastTag.endsWith('-git')
 
   if (lastTagIsGit === config.deploy.only_update_app) {
