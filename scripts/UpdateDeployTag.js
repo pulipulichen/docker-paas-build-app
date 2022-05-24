@@ -75,7 +75,7 @@ push
   // await ShellExec(`pwd`)
 
   // console.log(tmpGitPath + '/' + REPO_NAME, fs.existsSync(tmpGitPath + '/' + REPO_NAME))
-  // process.chdir(tmpGitPath + '/' + REPO_NAME)
+  process.chdir(tmpGitPath + '/' + REPO_NAME)
   // await ShellExec(`cd ${tmpGitPath + '/' + REPO_NAME}`)
 
   const DEPLOY_GIT_URL = config.environment.build.deploy_git_url
@@ -89,11 +89,21 @@ push
   // console.log(tmpGitPath + '/' + REPO_NAME, fs.existsSync(tmpGitPath + '/' + REPO_NAME))
   // await ShellExec(`ls ${tmpGitPath + '/' + REPO_NAME}`)
 
+  let createForceDeployCMD = `echo "${tag}" > FORCE_DEPLOY.txt`
+
+  let lastTag = fs.readFileSync('TAG_APP.txt', 'utf8')
+  let lastTagIsGit = lastTag.endsWith('-git')
+
+  if (lastTagIsGit === config.deploy.only_update_app) {
+    createForceDeployCMD = `echo "Skip force deploy."`
+  }
+
   // ----------------------------------------------------------------
   console.log(tag)
   await ShellExec([
     `cd ${tmpGitPath + '/' + REPO_NAME}`, 
     `ls -l`,
+    createForceDeployCMD,
     `echo "${tag}" > TAG_APP.txt`,
     `pwd`,
     `git add .`,
