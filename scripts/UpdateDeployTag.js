@@ -129,11 +129,7 @@ FROM ${config.environment.build.quay_prefix}/${REPO}:${tag}
 
 COPY app/ ${config.app.app_path}
 
-# ---------------------------------------------------------------
-# CMD
-# 
 # Please add the CMD to project.yaml too.
-
 CMD ${JSON.stringify(config.app.Dockerfile.CMD.split(' '))}
 ${"````"}
 
