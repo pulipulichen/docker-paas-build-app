@@ -48,6 +48,7 @@ async function main (config) {
 
   if (lastTagIsGit !== config.deploy.only_update_app) {
     let tag = await BuildTag()
+    
     fs.writeFileSync('FORCE_DEPLOY.txt', tag, 'utf8')
     console.log(`
 ================================================
@@ -64,6 +65,12 @@ FORCE_DEPLOY.txt is created.
 }
 
 async function push (config) {
+  console.log(`
+============================================================
+push
+============================================================
+`)
+
   const REPO_NAME = getRepoName(config)
   // await ShellExec(`pwd`)
 
@@ -83,9 +90,10 @@ async function push (config) {
   // await ShellExec(`ls ${tmpGitPath + '/' + REPO_NAME}`)
 
   // ----------------------------------------------------------------
-
+  console.log(tag)
   await ShellExec([
     `cd ${tmpGitPath + '/' + REPO_NAME}`, 
+    `ls -l`,
     `echo "${tag}" > TAG_APP.txt`,
     `pwd`,
     `git add .`,
