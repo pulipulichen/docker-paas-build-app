@@ -45,7 +45,8 @@ async function main (config) {
   let lastTagIsGit = lastTag.endsWith('-git')
 
   if (lastTagIsGit !== config.deploy.only_update_app) {
-    fs.writeFileSync('FORCE_DEPLOY.txt', 'true', 'utf8')
+    let tag = await BuildTag()
+    fs.writeFileSync('FORCE_DEPLOY.txt', tag, 'utf8')
   }
   else if (config.deploy.only_update_app === true) {
     return false
