@@ -56,27 +56,28 @@ async function main (config) {
 
 async function push (config) {
   const REPO_NAME = getRepoName(config)
-  await ShellExec(`pwd`)
+  // await ShellExec(`pwd`)
 
-  console.log(tmpGitPath + '/' + REPO_NAME, fs.existsSync(tmpGitPath + '/' + REPO_NAME))
-  process.chdir(tmpGitPath + '/' + REPO_NAME)
-  await ShellExec(`cd ${tmpGitPath + '/' + REPO_NAME}`)
+  // console.log(tmpGitPath + '/' + REPO_NAME, fs.existsSync(tmpGitPath + '/' + REPO_NAME))
+  // process.chdir(tmpGitPath + '/' + REPO_NAME)
+  // await ShellExec(`cd ${tmpGitPath + '/' + REPO_NAME}`)
 
   const DEPLOY_GIT_URL = config.environment.build.deploy_git_url
   // -------------------
 
   let tag = await BuildTag()
-  fs.writeFileSync('TAG_APP.txt', tag, 'utf8')
+  // fs.writeFileSync('TAG_APP.txt', tag, 'utf8')
 
-  await ShellExec(`pwd`)
-  await ShellExec(`ls`)
-  console.log(tmpGitPath + '/' + REPO_NAME, fs.existsSync(tmpGitPath + '/' + REPO_NAME))
-  await ShellExec(`ls ${tmpGitPath + '/' + REPO_NAME}`)
+  // await ShellExec(`pwd`)
+  // await ShellExec(`ls`)
+  // console.log(tmpGitPath + '/' + REPO_NAME, fs.existsSync(tmpGitPath + '/' + REPO_NAME))
+  // await ShellExec(`ls ${tmpGitPath + '/' + REPO_NAME}`)
 
   // ----------------------------------------------------------------
 
   await ShellExec([
     `cd ${tmpGitPath + '/' + REPO_NAME}`, 
+    `echo "${tag}" >> TAG_APP.txt`,
     `pwd`,
     `git add .`,
     `git commit -m "CI TAG: ${tag}" --allow-empty`,
