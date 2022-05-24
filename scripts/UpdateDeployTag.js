@@ -49,6 +49,11 @@ async function main (config) {
   if (lastTagIsGit !== config.deploy.only_update_app) {
     let tag = await BuildTag()
     fs.writeFileSync('FORCE_DEPLOY.txt', tag, 'utf8')
+    console.log(`
+================================================
+FORCE_DEPLOY.txt is created.
+================================================
+`)
   }
   else if (config.deploy.only_update_app === true) {
     console.log('only_update_app')
@@ -119,8 +124,7 @@ async function showReadyForImportMessage (config) {
 ╚═╝╚═╝     ╚═╝╚═╝      ╚═════╝ ╚═╝  ╚═╝   ╚═╝   
                                                 
 You can use following Dockerfile:
-````
-#FROM pudding/dlll-paas-base-image:php-8-apache-20220522-1232
+${"````"}
 FROM ${config.environment.build.quay_prefix}/${REPO}:${tag}
 
 COPY app/ ${config.app.app_path}
@@ -131,7 +135,7 @@ COPY app/ ${config.app.app_path}
 # Please add the CMD to project.yaml too.
 
 CMD ${JSON.stringify(config.app.Dockerfile.CMD.split(' '))}
-````
+${"````"}
 
 `)
 }
