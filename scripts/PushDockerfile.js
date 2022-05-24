@@ -8,18 +8,7 @@ const fs = require('fs')
 const path = require('path')
 const LoadYAMLConfig = require('./lib/LoadYAMLConfig.js')
 
-function getTagPrefix(config) {
-  let prefix = config.deploy.tag_prefix
-
-  if (!prefix) {
-    return
-  }
-
-  prefix = prefix.toLowerCase()
-  prefix = prefix.replace(/[^a-zA-Z0-9\-]/g, "")
-
-  return prefix
-}
+const BuildTag = require('./BuildTag.js')
 
 async function setupQuay () {
   let config = await LoadYAMLConfig()
@@ -51,11 +40,7 @@ module.exports = async function (config) {
   let REPO = process.env.CI_PROJECT_NAME + '-' + process.env.CI_PROJECT_NAMESPACE
   console.log(`QUAY REPO: ${REPO}`)
 
-  let TAG = process.env.CI_COMMIT_SHORT_SHA
-  let prefix = getTagPrefix(config)
-  if (prefix && prefix !== '') {
-    TAG = prefix + '-' + TAG
-  }
+  let TAG = await BuildTag()
 
   // ------------------------
   

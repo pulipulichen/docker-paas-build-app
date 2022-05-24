@@ -18,17 +18,11 @@ async function setUserNameEmail(config) {
   await ShellExec(`git config --global user.name "${username}"`)
 }
 
-async function getTag(config) {
-  let tag = process.env.CI_COMMIT_SHORT_SHA
-  let prefix = getTagPrefix(config)
-  if (prefix) {
-    tag = prefix + '-' + tag
-  }
-}
+const BuildTag = require('./BuildTag.js')
+let tmpGitPath = '/tmp/git-deploy'
 
-async function main (config, tag) {
-
-  let tmpGitPath = '/tmp/git-deploy'
+async function main (config) {
+  
   fs.mkdirSync(tmpGitPath, { recursive: true})
   process.chdir(tmpGitPath)
 
@@ -47,6 +41,26 @@ async function main (config, tag) {
 
   // ----------------------------------------------------------------
 
+  let lastTag = fs.readFileSync('TAG_APP.txt', 'utf8')
+  let lastTagIsGit = lastTag.endsWith('-git')
+
+  if (lastTagIsGit !== config.deploy.only_update_app) {
+    fs.writeFileSync('FORCE_DEPLOY.txt', 'true', 'utf8')
+  }
+  else if (config.deploy.only_update_app === true) {
+    return false
+  }
+
+  return true
+}
+
+async function push (config) {
+  const REPO_NAME = getRepoName(config)
+  process.chdir(tmpGitPath + '/' + REPO_NAME)
+
+  // -------------------
+
+  let tag = await BuildTag()
   fs.writeFileSync('TAG_APP.txt', tag, 'utf8')
 
   // ----------------------------------------------------------------
@@ -56,4 +70,7 @@ async function main (config, tag) {
   await ShellExec(`git push -f ${DEPLOY_GIT_URL}`)
 }
 
-module.exports = main
+module.exports = {
+  clone: main,
+  push: push
+}

@@ -36,9 +36,11 @@ const main = async function () {
   //   return false
   // }
 
-  await BuildDockerfile(config)
-  let tag = await PushDockerfile(config)
-  await UpdateDeployTag(config, tag)
+  if (await UpdateDeployTag.clone(config)) {
+    await BuildDockerfile(config)
+    await PushDockerfile(config)
+    await UpdateDeployTag.push(config)
+  }
 }
 
 main()
