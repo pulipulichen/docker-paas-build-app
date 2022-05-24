@@ -58,6 +58,7 @@ async function push (config) {
   const REPO_NAME = getRepoName(config)
   process.chdir(tmpGitPath + '/' + REPO_NAME)
 
+  const DEPLOY_GIT_URL = config.environment.build.deploy_git_url
   // -------------------
 
   let tag = await BuildTag()
