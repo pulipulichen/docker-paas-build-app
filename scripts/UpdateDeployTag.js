@@ -45,12 +45,12 @@ async function main (config) {
   // ----------------------------------------------------------------
 
   let lastTag = fs.readFileSync(path.join(tmpGitPath + '/' + REPO_NAME, 'TAG_APP.txt'), 'utf8')
-  let lastTagIsGit = lastTag.endsWith('-git')
+  let lastTagIsGit = lastTag.trim().endsWith('-git')
 
   if (lastTagIsGit !== config.deploy.only_update_app) {
     let tag = await BuildTag()
     console.log({
-      lastTagIsGit,
+      lastTag,
       tag
     })
     fs.writeFileSync('FORCE_DEPLOY.txt', tag, 'utf8')
@@ -96,7 +96,7 @@ push
   let createForceDeployCMD = `echo "${tag}" > FORCE_DEPLOY.txt`
 
   let lastTag = fs.readFileSync(path.join(tmpGitPath + '/' + REPO_NAME, 'TAG_APP.txt'), 'utf8')
-  let lastTagIsGit = lastTag.endsWith('-git')
+  let lastTagIsGit = lastTag.trim().endsWith('-git')
 
   if (lastTagIsGit === config.deploy.only_update_app) {
     createForceDeployCMD = `echo "Skip force deploy."`
