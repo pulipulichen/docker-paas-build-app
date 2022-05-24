@@ -77,6 +77,7 @@ async function push (config) {
 
   await ShellExec([
     `cd ${tmpGitPath + '/' + REPO_NAME}`, 
+    `pwd`,
     `git add .`,
     `git commit -m "CI TAG: ${tag}" --allow-empty`,
     `git push -f ${DEPLOY_GIT_URL}`
