@@ -60,6 +60,7 @@ async function push (config) {
 
   console.log(tmpGitPath + '/' + REPO_NAME, fs.existsSync(tmpGitPath + '/' + REPO_NAME))
   process.chdir(tmpGitPath + '/' + REPO_NAME)
+  await ShellExec(`cd ${tmpGitPath + '/' + REPO_NAME}`)
 
   const DEPLOY_GIT_URL = config.environment.build.deploy_git_url
   // -------------------
