@@ -31,6 +31,11 @@ const main = async function () {
     return
   }
 
+  if (config.deploy.only_update_app === true) {
+    console.log('only_update_app')
+    return false
+  }
+
   await BuildDockerfile(config)
   let tag = await PushDockerfile(config)
   await UpdateDeployTag(config, tag)
