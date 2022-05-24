@@ -22,7 +22,7 @@ async function buildTag () {
     TAG = prefix + '-' + TAG
   }
 
-  if (config.deploy.only_update_app) {
+  if (config.deploy.only_update_app === true) {
     TAG = TAG + '-git'
   }
   return TAG

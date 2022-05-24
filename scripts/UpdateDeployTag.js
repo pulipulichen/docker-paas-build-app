@@ -21,12 +21,14 @@ async function setUserNameEmail(config) {
 const BuildTag = require('./BuildTag.js')
 let tmpGitPath = '/tmp/git-deploy'
 
+const REPO = process.env.CI_PROJECT_NAME + '-' + process.env.CI_PROJECT_NAMESPACE
+
 async function main (config) {
   
   fs.mkdirSync(tmpGitPath, { recursive: true})
   process.chdir(tmpGitPath)
 
-  const REPO = process.env.CI_PROJECT_NAME + '-' + process.env.CI_PROJECT_NAMESPACE
+  
   console.log("REPO: " + REPO)
 
   const DEPLOY_GIT_URL = config.environment.build.deploy_git_url
@@ -85,6 +87,53 @@ async function push (config) {
     `git commit -m "CI TAG: ${tag}" --allow-empty`,
     `git push -f ${DEPLOY_GIT_URL}`
   ])
+
+  if (config.deploy.only_update_app === false) {
+    await showReadyForImportMessage(config)
+  }
+}
+
+async function showReadyForImportMessage (config) {
+  let tag = await BuildTag()
+
+  console.log(`============================
+██████╗ ███████╗ █████╗ ██████╗ ██╗   ██╗       
+██╔══██╗██╔════╝██╔══██╗██╔══██╗╚██╗ ██╔╝       
+██████╔╝█████╗  ███████║██║  ██║ ╚████╔╝        
+██╔══██╗██╔══╝  ██╔══██║██║  ██║  ╚██╔╝         
+██║  ██║███████╗██║  ██║██████╔╝   ██║          
+╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝╚═════╝    ╚═╝          
+                                                
+███████╗ ██████╗ ██████╗                        
+██╔════╝██╔═══██╗██╔══██╗                       
+█████╗  ██║   ██║██████╔╝                       
+██╔══╝  ██║   ██║██╔══██╗                       
+██║     ╚██████╔╝██║  ██║                       
+╚═╝      ╚═════╝ ╚═╝  ╚═╝                       
+                                                
+██╗███╗   ███╗██████╗  ██████╗ ██████╗ ████████╗
+██║████╗ ████║██╔══██╗██╔═══██╗██╔══██╗╚══██╔══╝
+██║██╔████╔██║██████╔╝██║   ██║██████╔╝   ██║   
+██║██║╚██╔╝██║██╔═══╝ ██║   ██║██╔══██╗   ██║   
+██║██║ ╚═╝ ██║██║     ╚██████╔╝██║  ██║   ██║   
+╚═╝╚═╝     ╚═╝╚═╝      ╚═════╝ ╚═╝  ╚═╝   ╚═╝   
+                                                
+You can use following Dockerfile:
+````
+#FROM pudding/dlll-paas-base-image:php-8-apache-20220522-1232
+FROM ${config.environment.build.quay_prefix}/${REPO}:${tag}
+
+COPY app/ ${config.app.app_path}
+
+# ---------------------------------------------------------------
+# CMD
+# 
+# Please add the CMD to project.yaml too.
+
+CMD ${JSON.stringify(config.app.Dockerfile.CMD.split(' '))}
+````
+
+`)
 }
 
 module.exports = {
