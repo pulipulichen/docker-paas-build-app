@@ -79,7 +79,7 @@ async function push (config) {
 
   await ShellExec([
     `cd ${tmpGitPath + '/' + REPO_NAME}`, 
-    `echo "${tag}" >> TAG_APP.txt`,
+    `echo "${tag}" > TAG_APP.txt`,
     `pwd`,
     `git add .`,
     `git commit -m "CI TAG: ${tag}" --allow-empty`,
