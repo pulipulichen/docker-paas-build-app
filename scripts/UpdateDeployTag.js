@@ -49,6 +49,7 @@ async function main (config) {
     fs.writeFileSync('FORCE_DEPLOY.txt', tag, 'utf8')
   }
   else if (config.deploy.only_update_app === true) {
+    console.log('only_update_app')
     return false
   }
 
