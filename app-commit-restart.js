@@ -33,6 +33,7 @@ const main = async function () {
   }
 
   if (config.deploy.only_update_app !== true) {
+    console.log('only_update_app = false')
     return false
   }
 
