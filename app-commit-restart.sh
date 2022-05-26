@@ -1,4 +1,4 @@
-if [ $ENABLE_PULL_UPDATE ]; then
+if [ ${ENABLE_PULL_UPDATE} == "true" ]; then
   sh /app/docker-paas-build-app/update.sh
 fi
 
