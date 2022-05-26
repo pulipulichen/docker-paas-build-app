@@ -46,8 +46,9 @@ async function main (config) {
 
   let tagPath = path.join(tmpGitPath + '/' + REPO_NAME, 'TAG_APP.txt')
   let lastTagIsGit = false
+  let lastTag = ''
   if (fs.existsSync(tagPath)) {
-    let lastTag = fs.readFileSync(tagPath, 'utf8')
+    lastTag = fs.readFileSync(tagPath, 'utf8')
     lastTagIsGit = lastTag.trim().endsWith('-git')
   }
     
