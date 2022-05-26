@@ -47,10 +47,11 @@ async function main (config) {
   let tagPath = path.join(tmpGitPath + '/' + REPO_NAME, 'TAG_APP.txt')
   let lastTagIsGit = false
   let lastTag = ''
-  if (fs.existsSync(tagPath)) {
-    lastTag = fs.readFileSync(tagPath, 'utf8')
-    lastTagIsGit = lastTag.trim().endsWith('-git')
+  if (fs.existsSync(tagPath) === false) {
+    fs.writeFileSync(tagPath, '', 'utf8')
   }
+  lastTag = fs.readFileSync(tagPath, 'utf8')
+  lastTagIsGit = lastTag.trim().endsWith('-git')
     
 
   if (lastTagIsGit !== config.deploy.only_update_app) {
