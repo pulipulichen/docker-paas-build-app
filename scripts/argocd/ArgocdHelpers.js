@@ -317,7 +317,7 @@ module.exports = {
         await this.getConfig()
         // https://argocd.nccu.syntixi.dev/api/v1/applications/deploybot-test20220428-2220-pudding/resource/actions?namespace=default&resourceName=webapp-deployment-pudding-test20220428-2220&version=v1&kind=Deployment&group=apps
 
-        const url = config.server + `/api/v1/applications/deploybot-${appName}/resource/actions?namespace=default&resourceName=${resourceName}-deployment-${appName}&version=v1&kind=Deployment&group=apps`
+        const url = config.server + `/api/v1/applications/deploybot-${appName}/resource/actions?namespace=${appName}&resourceName=${resourceName}-deployment-${appName}&version=v1&kind=Deployment&group=apps`
         //console.log('restartResource', url)
         //console.log('token', token)
 
@@ -360,7 +360,7 @@ module.exports = {
 
             console.log(resultPost)
             */
-            await fetch(url, {
+            let result = await fetch(url, {
                 "headers": {
                   "content-type": "application/x-www-form-urlencoded",
                   "cookie": `argocd.token=${token}`,
@@ -368,6 +368,7 @@ module.exports = {
                 "body": "\"restart\"",
                 "method": "POST"
               });
+            console.log(result)
 
             return true
         }
