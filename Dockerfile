@@ -27,7 +27,7 @@ RUN git clone https://github.com/pulipulichen/docker-paas-build-app.git
 WORKDIR /app/docker-paas-build-app
 
 COPY package.json /app/docker-paas-build-app/
-COPY update.sh /app/docker-paas-build-app/
+COPY *.sh /app/docker-paas-build-app/
 
 RUN npm i
 #RUN npm i -g js-yaml
