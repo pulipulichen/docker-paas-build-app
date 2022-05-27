@@ -36,6 +36,7 @@ Please check locker: https://docs.google.com/spreadsheets/d/11U6a_gZTz0Gq3nmO2e_
 `)
     }
 
+    console.log(`wait for ${10*(retry + 1)} seconds ... ` + retry)
     await sleep(10000 * (retry + 1))
 
     retry++
