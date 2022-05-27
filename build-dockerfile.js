@@ -52,7 +52,7 @@ const main = async function () {
     await WaitForLock.unlock('app-build-dockerfile')
     throw e 
   }
-
+  await WaitForLock.unlock('app-build-dockerfile')
   
 }
 

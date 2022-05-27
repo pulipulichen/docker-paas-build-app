@@ -48,6 +48,7 @@ const main = async function () {
     
     const appName = process.env.CI_PROJECT_NAME + '-' + process.env.CI_PROJECT_NAMESPACE
     if (!appName || appName === '-') {
+      await WaitForLock.unlock('app-commit-restart')
       throw Error('App name should be specified.')
       process.exit()
     }
@@ -58,6 +59,7 @@ const main = async function () {
     await WaitForLock.unlock('app-commit-restart')
     throw e
   }
+  await WaitForLock.unlock('app-commit-restart')
 }
 
 main()
