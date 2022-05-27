@@ -42,18 +42,22 @@ const main = async function () {
   // ----------------------------------------------------------------
   await WaitForLock.lock('app-commit-restart')
 
-  await AppCommitToGit(config)
-  //await UnzipDatabasePVC(config)
-  
-  const appName = process.env.CI_PROJECT_NAME + '-' + process.env.CI_PROJECT_NAMESPACE
-  if (!appName || appName === '-') {
-    throw Error('App name should be specified.')
-    process.exit()
+  try {
+    await AppCommitToGit(config)
+    //await UnzipDatabasePVC(config)
+    
+    const appName = process.env.CI_PROJECT_NAME + '-' + process.env.CI_PROJECT_NAMESPACE
+    if (!appName || appName === '-') {
+      throw Error('App name should be specified.')
+      process.exit()
+    }
+    const token = await ArgocdHelpers.getCookieToken()
+    await ArgocdHelpers.restartResource(appName, token, 'app')
   }
-  const token = await ArgocdHelpers.getCookieToken()
-  await ArgocdHelpers.restartResource(appName, token, 'app')
-
-  await WaitForLock.unlock('app-commit-restart')
+  catch (e) {
+    await WaitForLock.unlock('app-commit-restart')
+    throw e
+  }
 }
 
 main()

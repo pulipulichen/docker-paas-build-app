@@ -41,13 +41,19 @@ const main = async function () {
 
   await WaitForLock.lock('app-build-dockerfile')
 
-  if (await UpdateDeployTag.clone(config)) {
-    await BuildDockerfile(config)
-    await PushDockerfile(config)
-    await UpdateDeployTag.push(config)
+  try {
+    if (await UpdateDeployTag.clone(config)) {
+      await BuildDockerfile(config)
+      await PushDockerfile(config)
+      await UpdateDeployTag.push(config)
+    }
+  }
+  catch (e) {
+    await WaitForLock.unlock('app-build-dockerfile')
+    throw e 
   }
 
-  await WaitForLock.unlock('app-build-dockerfile')
+  
 }
 
 main()
