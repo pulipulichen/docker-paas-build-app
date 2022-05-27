@@ -35,7 +35,7 @@ RUN npm i
 
 #RUN mkdir -p /app/scripts
 #WORKDIR /app/scripts
-COPY scripts /app/docker-paas-build-app/scripts/
+COPY scripts /app/docker-paas-build-app/
 COPY build-dockerfile.js /app/docker-paas-build-app/
 
 WORKDIR /app/docker-paas-build-app/
