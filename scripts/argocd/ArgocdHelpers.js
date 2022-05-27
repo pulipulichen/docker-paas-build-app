@@ -5,6 +5,12 @@ const fetch = require('node-fetch')
 
 const fs = require('fs')
 
+const axiosRetry = require('axios-retry')
+axiosRetry(axios, { retries: 10 })
+axiosRetry(axios, { retryDelay: (retryCount) => {
+    return retryCount * 1000;
+}})
+
 const tmpTokenPath = '/tmp/argocd.token.txt'
 
 let config

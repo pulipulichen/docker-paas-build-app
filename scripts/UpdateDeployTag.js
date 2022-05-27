@@ -33,13 +33,13 @@ async function main (config) {
   console.log("REPO: " + REPO)
 
   const DEPLOY_GIT_URL = config.environment.build.deploy_git_url
-  await ShellExec(`git clone -b ${REPO} ${DEPLOY_GIT_URL} || git clone ${DEPLOY_GIT_URL}`)
+  await ShellExec(`git clone -b ${REPO} ${DEPLOY_GIT_URL} || git clone ${DEPLOY_GIT_URL}`, {retry: 3})
 
   const REPO_NAME = getRepoName(config)
   process.chdir(tmpGitPath + '/' + REPO_NAME)
 
   await setUserNameEmail(config)
-  await ShellExec(`git checkout -b ${REPO} || git checkout ${REPO}`)
+  await ShellExec(`git checkout -b ${REPO} || git checkout ${REPO}`, {retry: 3})
 
 
   // ----------------------------------------------------------------
@@ -118,9 +118,13 @@ push
     `ls -l`,
     `pwd`,
     `git add .`,
-    `git commit -m "CI TAG: ${tag}" --allow-empty`,
-    `git push -f ${DEPLOY_GIT_URL}`
+    `git commit -m "CI TAG: ${tag}" --allow-empty`
   ])
+
+  await ShellExec([
+    `cd ${tmpGitPath + '/' + REPO_NAME}`, 
+    `git push -f ${DEPLOY_GIT_URL}`
+  ], {retry: 3})
 
   if (config.deploy.only_update_app === false) {
     await showReadyForImportMessage(config)

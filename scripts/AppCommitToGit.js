@@ -28,7 +28,7 @@ async function main (config) {
   // }
   
   const DEPLOY_GIT_URL = config.environment.build.app_git_url
-  await ShellExec(`git clone ${DEPLOY_GIT_URL}`)
+  await ShellExec(`git clone -b ${REPO} ${DEPLOY_GIT_URL} || git clone ${DEPLOY_GIT_URL}`, {retry: 3})
 
   let REPO_NAME = DEPLOY_GIT_URL.slice(DEPLOY_GIT_URL.lastIndexOf('/') + 1)
   REPO_NAME = REPO_NAME.slice(0, REPO_NAME.lastIndexOf('.'))
@@ -42,7 +42,7 @@ async function main (config) {
   ShellExec(`git config --global user.email "${username}@${host}"`)
   ShellExec(`git config --global user.name "${username}"`)
 
-  ShellExec(`git checkout -b ${REPO} || git checkout ${REPO}`)
+  ShellExec(`git checkout -b ${REPO} || git checkout ${REPO}`, {retry: 3})
 
   // -------------------------------
 
@@ -52,7 +52,7 @@ async function main (config) {
 
   await ShellExec(`git add .`)
   await ShellExec(`git commit -m "CI TAG: ${process.env.CI_COMMIT_SHORT_SHA}"`)
-  await ShellExec(`git push -f ${DEPLOY_GIT_URL}`)
+  await ShellExec(`git push -f ${DEPLOY_GIT_URL}`, {retry: 3})
 
 }
 
