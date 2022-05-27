@@ -18,6 +18,7 @@ const PushDockerfile = require('./scripts/PushDockerfile.js')
 
 // const ArgocdHelpers = require('./scripts/argocd/ArgocdHelpers.js')
 const UpdateDeployTag = require('./scripts/UpdateDeployTag.js')
+const WaitForLock = require('./scripts/lib/WaitForLock.js')
 
 const main = async function () {
   // if (config.backup.persist_data === true) {
@@ -28,19 +29,25 @@ const main = async function () {
 
   if (config.deploy.enable !== true) {
     console.log('Build is disabled.')
-    return
+    return false
   }
+
+  // ==============================
 
   // if (config.deploy.only_update_app === true) {
   //   console.log('only_update_app')
   //   return false
   // }
 
+  await WaitForLock.lock()
+
   if (await UpdateDeployTag.clone(config)) {
     await BuildDockerfile(config)
     await PushDockerfile(config)
     await UpdateDeployTag.push(config)
   }
+
+  await WaitForLock.unlock()
 }
 
 main()

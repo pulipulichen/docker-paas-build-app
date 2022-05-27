@@ -13,12 +13,14 @@ const LoadYAMLConfig = require('./scripts/lib/LoadYAMLConfig.js')
 
 //const UnzipDatabasePVC = require('./lib/UnzipDatabasePVC.js')
 const AppCommitToGit = require('./scripts/AppCommitToGit.js')
-const BuildDockerfile = require('./scripts/BuildDockerfile.js')
-const PushDockerfile = require('./scripts/PushDockerfile.js')
+// const BuildDockerfile = require('./scripts/BuildDockerfile.js')
+// const PushDockerfile = require('./scripts/PushDockerfile.js')
 
 const ArgocdHelpers = require('./scripts/argocd/ArgocdHelpers.js')
-const UpdateDeployTag = require('./scripts/UpdateDeployTag.js')
-const ShellExec = require('./scripts/lib/ShellExec.js')
+// const UpdateDeployTag = require('./scripts/UpdateDeployTag.js')
+// const ShellExec = require('./scripts/lib/ShellExec.js')
+
+const WaitForLock = require('./scripts/lib/WaitForLock.js')
 
 const main = async function () {
   // if (config.backup.persist_data === true) {
@@ -37,6 +39,9 @@ const main = async function () {
     return false
   }
 
+  // ----------------------------------------------------------------
+  await WaitForLock.lock()
+
   await AppCommitToGit(config)
   //await UnzipDatabasePVC(config)
   
@@ -47,6 +52,8 @@ const main = async function () {
   }
   const token = await ArgocdHelpers.getCookieToken()
   await ArgocdHelpers.restartResource(appName, token, 'app')
+
+  await WaitForLock.unlock()
 }
 
 main()
