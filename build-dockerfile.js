@@ -39,7 +39,7 @@ const main = async function () {
   //   return false
   // }
 
-  await WaitForLock.lock()
+  await WaitForLock.lock('app-build-dockerfile')
 
   if (await UpdateDeployTag.clone(config)) {
     await BuildDockerfile(config)
@@ -47,7 +47,7 @@ const main = async function () {
     await UpdateDeployTag.push(config)
   }
 
-  await WaitForLock.unlock()
+  await WaitForLock.unlock('app-build-dockerfile')
 }
 
 main()

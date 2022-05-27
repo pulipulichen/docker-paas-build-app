@@ -40,7 +40,7 @@ const main = async function () {
   }
 
   // ----------------------------------------------------------------
-  await WaitForLock.lock()
+  await WaitForLock.lock('app-commit-restart')
 
   await AppCommitToGit(config)
   //await UnzipDatabasePVC(config)
@@ -53,7 +53,7 @@ const main = async function () {
   const token = await ArgocdHelpers.getCookieToken()
   await ArgocdHelpers.restartResource(appName, token, 'app')
 
-  await WaitForLock.unlock()
+  await WaitForLock.unlock('app-commit-restart')
 }
 
 main()
