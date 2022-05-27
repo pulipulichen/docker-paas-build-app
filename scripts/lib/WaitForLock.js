@@ -27,7 +27,7 @@ async function waitForLock (keySuffix = '', retry = 0) {
   let data = result.data.result
   
   if (queryPassed.indexOf(data) === -1) {
-    if (retry === 50) {
+    if (retry === 500) {
       throw new Error(`
 ==================
 Wait for lock error. 
