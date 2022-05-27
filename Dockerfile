@@ -22,6 +22,7 @@ RUN mkdir /app
 #COPY package.json /app/
 
 WORKDIR /app
+RUN echo "20220527-2251"
 RUN git clone https://github.com/pulipulichen/docker-paas-build-app.git
 
 WORKDIR /app/docker-paas-build-app
