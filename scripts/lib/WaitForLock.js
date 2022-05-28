@@ -42,7 +42,7 @@ Please check locker: ${view}
     }
 
     console.log(`
-wait for ${10*(retry + 1)} seconds ... ` + retry + `
+wait for ${10*(retry + 1)} seconds ... ` + retry + ` ${new Date() + ''}
   Check ${view}
 
 `)
