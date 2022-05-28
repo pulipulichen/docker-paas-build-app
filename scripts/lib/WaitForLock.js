@@ -55,7 +55,7 @@ wait for ${10*(retry + 1)} seconds ... ` + retry + `
 
 async function unlock (keySuffix = '') {
   let key = await getKey(keySuffix)
-  await axios.get(`${api}?key=${key}&name=${name}&timeout=${timeout}&cocurrent=${cocurrent}&action=remove`)
+  await axios.get(`${api}?key=${key}&name=${name}&timeout=${timeout}&concurrent=${concurrent}&action=remove`)
 }
 
 module.exports = {
