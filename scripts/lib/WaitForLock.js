@@ -8,7 +8,7 @@ axiosRetry(axios, { retryDelay: (retryCount) => {
     return retryCount * 1000;
 }})
 
-let api = `https://script.google.com/macros/s/AKfycbyWBg2jJwT8X0d1qT86NIP5Y8l_ETx-chPawU7TpedEgZLXAzJbtIXVOFDc7E1rb9ut/exec`
+let api = `https://script.google.com/macros/s/AKfycbwjjDjwVN1tyW85by9I4ag9gcI_qy0jNb4M7E4VP_dTUs-7HpSCGoFINUSdygcxGQrm/exec`
 let view = `https://docs.google.com/spreadsheets/d/11U6a_gZTz0Gq3nmO2e_1qfLkhqd9Q70j5M1COzndKZA/edit?usp=sharing`
 
 let queryPassed = ['added', 'reset', 'timeout', 'existed']
