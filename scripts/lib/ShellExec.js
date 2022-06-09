@@ -6,7 +6,7 @@ module.exports = async function (cmd, options = {}) {
     cmd = cmd.join(' && ')
   }
 
-  let {stderrHandler, errorHandler, retry} = options
+  let {stderrHandler, errorHandler, retry = -1} = options
   
   if (typeof(stderrHandler) !== 'function') {
     stderrHandler = function (stderr) {
@@ -28,7 +28,7 @@ module.exports = async function (cmd, options = {}) {
 
       exec(cmd , async (error, stdout, stderr) => {
         if (error) {
-          if (currentRetry === retry) {
+          if (retry === -1 || currentRetry === retry) {
             return errorHandler(error, reject)
           }
           currentRetry++
