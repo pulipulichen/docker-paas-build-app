@@ -133,7 +133,9 @@ push
 
 async function showReadyForImportMessage (config) {
   let tag = await BuildTag()
-  let {WORKDIR, CMD, USER, EXPOSE} = config.environment.app.app.Dockerfile
+  let {WORKDIR, CMD, USER, EXPOSE, ENV} = config.environment.app.app.Dockerfile
+
+  let envString = Object.keys(ENV).map(key => `ENV ${key}=${ENV[key]}`).join('\n')
 
   console.log(`============================
 ██████╗ ███████╗ █████╗ ██████╗ ██╗   ██╗       
@@ -167,8 +169,7 @@ FROM ${config.environment.build.quay_prefix}/${REPO}:${tag}
 COPY app/ ${WORKDIR}
 USER ${USER}
 EXPOSE ${EXPOSE}
-ENV env1=a
-ENV env2=b
+${envString}
 WORKDIR ${WORKDIR}
 CMD ${CMD}
 ${"````"}
