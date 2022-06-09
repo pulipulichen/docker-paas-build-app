@@ -98,7 +98,8 @@ ${CMD}
 }
 
 function setupDockerfileCopy ({config, REPO}) {
-  let { app_path } = config.environment.app.Dockerfile
+  let { WORKDIR } = config.environment.app.Dockerfile
+  let app_path = WORKDIR
   let app_path_parent = path.dirname(app_path)
   let app_path_basename = path.basename(app_path)
 
