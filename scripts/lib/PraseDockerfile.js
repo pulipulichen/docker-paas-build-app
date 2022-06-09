@@ -82,7 +82,7 @@ const getENV = function () {
   }
 
   cache[attr] = {}
-  for (let i = commands.length - 1; i > -1; i--) {
+  for (let i = 0; i < commands.length; i++) {
     let {name, args} = commands[i]
 
     if (name === attr) {
