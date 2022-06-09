@@ -66,6 +66,7 @@ const getWORKDIR = function () {
   return getAttr('WORKDIR', '/app')
 }
 
+
 const getENV = function () {
   let attr = 'ENV'
   if (cache[attr]) {
@@ -77,16 +78,16 @@ const getENV = function () {
     let {name, args} = commands[i]
 
     if (name === attr) {
-      let arg = args.join(' ').trim()
-      let pos = arg.indexOf('=')
-      let envName = arg.slice(0, pos).trim()
-      let envValue = arg.slice(pos+1).trim()
-      cache[attr][envName] = envValue
+      Object.keys(args).forEach(envName => {
+        let envValue = args[envName]
+        cache[attr][envName] = envValue
+      })
     }
   }
 
   return cache[attr]
 }
+
 
 module.exports = {
   getUSER,
