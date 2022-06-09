@@ -3,6 +3,7 @@ const path = require('path')
 const unzipper = require('unzipper')
 
 const ShellExec = require('./lib/ShellExec.js')
+const PraseDockerfile = require('./lib/PraseDockerfile.js')
 
 async function unzip(zipPath, targetDir) {
   return new Promise(resolve => {
@@ -53,8 +54,8 @@ function setupUser (USER) {
   return setSystemUser
 }
 
-function buildEntrypoint ({config, BUILD_DIR, REPO}) {
-  let {CMD} = config.app.Dockerfile
+async function buildEntrypoint ({config, BUILD_DIR, REPO}) {
+  let CMD = await PraseDockerfile.getCMD()
 
   let script = fs.readFileSync('/app/docker-paas-build-app/scripts/entrypoint.sh', 'utf8')
 
@@ -184,7 +185,7 @@ module.exports = async function (config) {
   const REPO = process.env.CI_PROJECT_NAME + '-' + process.env.CI_PROJECT_NAMESPACE
   console.log("REPO: " + REPO)
 
-  let { USER, CMD } = config.app.Dockerfile
+  let USER = await PraseDockerfile.getUSER()
   let { app_path, data_path } = config.app
   let system_user = USER
 
@@ -200,7 +201,7 @@ module.exports = async function (config) {
 
   // ----------------------------------------------------
   // 建立 entrypoint.sh
-  buildEntrypoint({config, BUILD_DIR, REPO})
+  await buildEntrypoint({config, BUILD_DIR, REPO})
 
   // ----------------------------------------------------
   // Git
