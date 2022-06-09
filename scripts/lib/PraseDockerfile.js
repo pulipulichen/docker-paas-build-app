@@ -29,6 +29,7 @@ const getAttr = function (attr, defaultValue) {
   return cache[attr]
 }
 
+
 function setAPPDockerfile (config) {
   if (!config.environment) {
     config.environment = {}
@@ -38,16 +39,23 @@ function setAPPDockerfile (config) {
     config.environment.app = {}
   }
 
-  if (!config.environment.app.Dockerfile) {
-    config.environment.app.Dockerfile = {}
+  if (!config.environment.app.app) {
+    config.environment.app.app = {}
   }
 
-  config.environment.app.Dockerfile.EXPOSE = getEXPOSE()
-  config.environment.app.Dockerfile.USER = getUSER()
-  config.environment.app.Dockerfile.WORKDIR = getWORKDIR()
-  config.environment.app.Dockerfile.CMD = getCMD()
-  config.environment.app.Dockerfile.ENV = getENV()
+  if (!config.environment.app.app.Dockerfile) {
+    config.environment.app.app.Dockerfile = {}
+  }
+
+  config.environment.app.app.Dockerfile.EXPOSE = getEXPOSE()
+  config.environment.app.app.Dockerfile.USER = getUSER()
+  config.environment.app.app.Dockerfile.WORKDIR = getWORKDIR()
+  config.environment.app.app.Dockerfile.CMD = getCMD()
+  config.environment.app.app.Dockerfile.ENV = getENV()
+
+  // console.log(config.environment.app.app.Dockerfile)
 }
+
 
 
 const getUSER = function () {
