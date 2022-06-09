@@ -98,7 +98,7 @@ ${CMD}
 }
 
 function setupDockerfileCopy ({config, REPO}) {
-  let { app_path } = config.app
+  let { app_path } = config.environment.app.Dockerfile
   let app_path_parent = path.dirname(app_path)
   let app_path_basename = path.basename(app_path)
 
@@ -185,8 +185,8 @@ module.exports = async function (config) {
   const REPO = process.env.CI_PROJECT_NAME + '-' + process.env.CI_PROJECT_NAMESPACE
   console.log("REPO: " + REPO)
 
-  let USER = await PraseDockerfile.getUSER()
-  let { app_path, data_path } = config.app
+  let { WORKDIR, USER} = config.environment.app.Dockerfile
+  let { data_path } = config.app
   let system_user = USER
 
   fs.mkdirSync('./build_tmp/')
@@ -249,7 +249,7 @@ RUN chmod 777 ${containerEntrypointFolder}entrypoint.sh
 
 CMD ["sh", "${containerEntrypointFolder}entrypoint.sh"]
 
-WORKDIR ${app_path}
+WORKDIR ${WORKDIR}
 
 # USER 一定要最後設定
 ${setSystemUser}

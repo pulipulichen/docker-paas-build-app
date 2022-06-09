@@ -4,11 +4,12 @@
     "build-bash": "docker-compose build; docker-compose run app bash"
   },
   "dependencies": {
-    "js-yaml": "4.1.0",
-    "unzipper": "0.10.11",
-    "fast-glob": "3.2.11",
-    "node-fetch": "2.0.0",
     "axios": "0.27.2",
-    "axios-retry": "3.2.5"
+    "axios-retry": "3.2.5",
+    "docker-file-parser": "1.0.7",
+    "fast-glob": "3.2.11",
+    "js-yaml": "4.1.0",
+    "node-fetch": "2.0.0",
+    "unzipper": "0.10.11"
   }
 }

@@ -133,6 +133,7 @@ push
 
 async function showReadyForImportMessage (config) {
   let tag = await BuildTag()
+  let {WORKDIR, CMD, USER, EXPOSE} = config.environment.app.Dockerfile
 
   console.log(`============================
 ██████╗ ███████╗ █████╗ ██████╗ ██╗   ██╗       
@@ -160,10 +161,16 @@ You can use following Dockerfile:
 ${"````"}
 FROM ${config.environment.build.quay_prefix}/${REPO}:${tag}
 
-COPY app/ ${config.app.app_path}
+# ------------------
+# Following configuration will be used within CI/CD for Kubernetes. Please keep them at the bottom of file.
 
-# Please add the CMD to project.yaml too.
-CMD ${JSON.stringify(config.app.Dockerfile.CMD.split(' '))}
+COPY app/ ${WORKDIR}
+USER ${USER}
+EXPOSE ${EXPOSE}
+ENV env1=a
+ENV env2=b
+WORKDIR ${WORKDIR}
+CMD ${CMD}
 ${"````"}
 
 `)

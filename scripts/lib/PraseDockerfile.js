@@ -1,71 +1,74 @@
-const LoadYAMLConfig = require('./LoadYAMLConfig.js')
-let config
-let USER = false
-let CMD = false
+let cache = {}
 
+const fs = require('fs')
+const path = require('path')
+const parser = require('docker-file-parser')
 const BUILD_DIR = path.join('/builds/', process.env.CI_PROJECT_NAMESPACE, process.env.CI_PROJECT_NAME)
-var parser = require('docker-file-parser');
 const commands = parser.parse(fs.readFileSync(path.join(BUILD_DIR, '/config/Dockerfile'), 'utf8'))
 
-const getUser = async function () {
-  if (USER) {
-    return USER
+const getAttr = function (attr, defaultValue) {
+  if (cache[attr]) {
+    return cache[attr]
   }
 
-  if (!config) {
-    config = LoadYAMLConfig()
-  }
-
-  for (let i = 0; i < commands.length; i++) {
+  for (let i = commands.length - 1; i > -1; i--) {
     let {name, args} = commands[i]
 
-    if (name === 'USER') {
-      USER = args.join('').trim()
+    if (name === attr) {
+      cache[attr] = args
+      if (Array.isArray(cache[attr])) {
+        cache[attr] = cache[attr].join(' ').trim()
+      }
       break
     }
   }
 
-  if (!USER && 
-      config.app && 
-      config.app.Dockerfile &&
-      config.app.Dockerfile.USER) {
-    USER = config.app.Dockerfile.USER
+  if (!cache[attr] && defaultValue) {
+    cache[attr] = defaultValue
   }
-
-  if (!USER) {
-    user = 'root'
-  }
-  return USER
+  return cache[attr]
 }
 
-const getCMD = async function () {
-  if (CMD) {
-    return CMD
+function setAPPDockerfile (config) {
+  if (!config.environment) {
+    config.environment = {}
   }
 
-  if (!config) {
-    config = LoadYAMLConfig()
+  if (!config.environment.app) {
+    config.environment.app = {}
   }
 
-  for (let i = 0; i < commands.length; i++) {
-    let {name, args} = commands[i]
-
-    if (name === 'CMD') {
-      CMD = args.join(' ').trim()
-      break
-    }
+  if (!config.environment.app.Dockerfile) {
+    config.environment.app.Dockerfile = {}
   }
 
-  if (!CMD && 
-    config.app && 
-    config.app.Dockerfile &&
-    config.app.Dockerfile.CMD) {
-  CMD = config.app.Dockerfile.CMD
+  config.environment.app.Dockerfile.EXPOSE = getEXPOSE()
+  config.environment.app.Dockerfile.USER = getUSER()
+  config.environment.app.Dockerfile.WORKDIR = getWORKDIR()
+  config.environment.app.Dockerfile.CMD = getCMD()
 }
-return CMD
+
+
+const getUSER = function () {
+  return getAttr('USER', 'root')
+}
+
+const getCMD = function () {
+  return getAttr('CMD', '')
+}
+
+const getEXPOSE = function () {
+  return getAttr('EXPOSE', 80)
+}
+
+const getWORKDIR = function () {
+  return getAttr('WORKDIR', '/app')
 }
 
 module.exports = {
-  getUser,
-  getCMD
+  getUSER,
+  getCMD,
+  getEXPOSE,
+  getWORKDIR,
+  setAPPDockerfile
 }

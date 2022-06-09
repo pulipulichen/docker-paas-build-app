@@ -3,6 +3,7 @@ const path = require('path')
 
 const yaml = require('js-yaml')
 const fg = require('fast-glob')
+const PraseDockerfile = require('./PraseDockerfile')
 
 module.exports = async function () {
 
@@ -43,6 +44,8 @@ module.exports = async function () {
   if (Object.keys(config).length === 0) {
     throw new Error('values.yaml is not found')
   }
+
+  PraseDockerfile.setAPPDockerfile(config)
 
   return config
 }
