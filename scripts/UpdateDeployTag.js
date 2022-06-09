@@ -133,7 +133,7 @@ push
 
 async function showReadyForImportMessage (config) {
   let tag = await BuildTag()
-  let {WORKDIR, CMD, USER, EXPOSE} = config.environment.app.Dockerfile
+  let {WORKDIR, CMD, USER, EXPOSE} = config.environment.app.app.Dockerfile
 
   console.log(`============================
 ██████╗ ███████╗ █████╗ ██████╗ ██╗   ██╗       

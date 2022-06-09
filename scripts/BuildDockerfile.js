@@ -98,7 +98,7 @@ ${CMD}
 }
 
 function setupDockerfileCopy ({config, REPO}) {
-  let { WORKDIR } = config.environment.app.Dockerfile
+  let { WORKDIR } = config.environment.app.app.Dockerfile
   let app_path = WORKDIR
   let app_path_parent = path.dirname(app_path)
   let app_path_basename = path.basename(app_path)
@@ -186,7 +186,7 @@ module.exports = async function (config) {
   const REPO = process.env.CI_PROJECT_NAME + '-' + process.env.CI_PROJECT_NAMESPACE
   console.log("REPO: " + REPO)
 
-  let { WORKDIR, USER} = config.environment.app.Dockerfile
+  let { WORKDIR, USER} = config.environment.app.app.Dockerfile
   let { data_path } = config.app
   let system_user = USER
 
