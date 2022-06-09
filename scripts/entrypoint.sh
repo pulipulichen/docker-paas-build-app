@@ -2,8 +2,8 @@
 # =================================
 # WEBSSH
 
-if [ \( ${APP_USERNAME} \) -o \( ${AUTH_PASSWORD} \) ]; then
-  echo "$APP_USERNAME:$AUTH_PASSWORD" | chpasswd
+if [ \( ${DOCKERFILE_USER} \) -o \( ${AUTH_PASSWORD} \) ]; then
+  echo "$DOCKERFILE_USER:$AUTH_PASSWORD" | chpasswd
   echo "[WEBSSH] Username and password updated."
 fi
 
