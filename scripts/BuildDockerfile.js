@@ -66,7 +66,9 @@ async function buildEntrypoint ({config, BUILD_DIR, REPO}) {
 CURRENT_DIR=\`pwd\`
 
 cd /paas_app/app/
+echo "==[ls -l /paas_app/app/]========="
 ls -l /paas_app/app/
+echo "==[ls -l /]========="
 ls -l /
 git reset --hard
 git pull origin ${REPO}
@@ -125,13 +127,14 @@ RUN mkdir -p ${containerAppFolder}
 WORKDIR ${containerAppFolder}
 RUN git clone --no-checkout ${APP_GIT_URL} || echo "git is existed"
 
-WORKDIR ${path.join(containerAppFolder,REPO_NAME)}/
+WORKDIR ${path.join(containerAppFolder,REPO_NAME)}
 RUN git config --global user.email "${username}@${host}"
 RUN git config --global user.name "${username}"
 RUN git checkout -b ${REPO} || git checkout ${REPO}
 RUN git config --global pull.rebase true
 
 # APP
+#RUN rm -rf ${path.join(app_path_parent,app_path_basename)} || echo "No folder: ${path.join(app_path_parent,app_path_basename)}"
 RUN rm -rf ${path.join(app_path_parent,app_path_basename)} || echo "No folder: ${path.join(app_path_parent,app_path_basename)}"
 RUN ln -s ${path.join(containerAppFolder, REPO_NAME)} ${app_path_parent}
 RUN mv ${path.join(app_path_parent, REPO_NAME)} ${path.join(app_path_parent, app_path_basename)} || echo "Same folder name: ${path.join(app_path_parent,app_path_basename)}"
