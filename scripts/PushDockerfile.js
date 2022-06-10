@@ -50,8 +50,15 @@ module.exports = async function (config) {
   console.log('============================================================')
   console.log(`Build Dockerfile...`)
   console.log('============================================================')
-  await ShellExec(`docker build -f ./build_tmp/Dockerfile -t ${QUAY_PREFIX}/${REPO}:app-${TAG} .`)
-
+  try {
+    await ShellExec(`docker build -f ./build_tmp/Dockerfile -t ${QUAY_PREFIX}/${REPO}:app-${TAG} .`)
+  }
+  catch (e) {
+    console.log(fs.readFileSync(`./build_tmp/Dockerfile`))
+    console.log('============================================================')
+    throw e
+  }
+  
   console.log('============================================================')
   console.log(`Push docker image...`)
   console.log('============================================================')
