@@ -36,7 +36,7 @@ async function setupData ({BUILD_DIR, system_user}) {
     console.log('Unzip app.zip to', targetDir)
 
     copyCmd = `COPY ${targetDir} ${containerBackupFolder}
-RUN chmod -R 777 ${containerBackupFolder}/*`
+RUN chmod -R 777 ${path.join(containerBackupFolder, '/*')}`
 
     if (system_user) {
       copyCmd += `\nRUN chown ${system_user}:${system_user} -R ${containerBackupFolder}`
@@ -133,8 +133,8 @@ RUN git config --global pull.rebase true
 
 # APP
 RUN rm -rf ${path.join(app_path_parent,app_path_basename)} || echo "No folder: ${path.join(app_path_parent,app_path_basename)}"
-RUN ln -s ${path.join(containerAppFolder,REPO_NAME)} ${app_path_parent}
-RUN mv ${path.join(app_path_parent,REPO_NAME)} ${path.join(app_path_parent,app_path_basename)} || echo "Same folder name: ${path.join(app_path_parent,app_path_basename)}"
+RUN ln -s ${path.join(containerAppFolder, REPO_NAME)} ${app_path_parent}
+RUN mv ${path.join(app_path_parent, REPO_NAME)} ${path.join(app_path_parent, app_path_basename)} || echo "Same folder name: ${path.join(app_path_parent,app_path_basename)}"
 `
 
   let dockerfileCopy = `
