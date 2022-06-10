@@ -82,6 +82,7 @@ async function buildEntrypoint ({config, BUILD_DIR, REPO}) {
 
 # =================================
 # Original Command:
+
 ${CMD}
 
 `
@@ -264,8 +265,6 @@ RUN echo "PermitRootLogin yes" >> /etc/ssh/sshd_config
 ENV DATA_PATH=${data_path}
 ${copyCmd}
 
-${dockerfileCopy}
-
 # ENTRYPOINT
 COPY build_tmp/entrypoint.sh ${containerEntrypointFolder}
 RUN chmod 777 ${containerEntrypointFolder}entrypoint.sh
@@ -275,6 +274,8 @@ RUN chmod 777 ${containerEntrypointFolder}entrypoint.sh
 ${BaseDockerfile.after}
 
 # ============================================
+
+${dockerfileCopy}
 
 CMD ["sh", "${containerEntrypointFolder}entrypoint.sh"]
 
