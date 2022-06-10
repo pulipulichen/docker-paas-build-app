@@ -128,8 +128,9 @@ RUN git checkout -b ${REPO} || git checkout ${REPO}
 RUN git config --global pull.rebase true
 
 # APP
+RUN rm -rf ${app_path_parent}/${app_path_basename} || echo "No folder: ${app_path_parent}/${app_path_basename}"
 RUN ln -s ${containerAppFolder}${REPO_NAME} ${app_path_parent}
-RUN mv ${app_path_parent}/${REPO_NAME} ${app_path_parent}/${app_path_basename}
+RUN mv ${app_path_parent}/${REPO_NAME} ${app_path_parent}/${app_path_basename} || echo "Same folder name: ${app_path_parent}/${app_path_basename}"
 `
 
   let dockerfileCopy = `
