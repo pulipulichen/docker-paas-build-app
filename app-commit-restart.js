@@ -34,6 +34,12 @@ const main = async function () {
     return
   }
 
+  const project_archive = config.project_archive
+  if (project_archive === true) {
+    console.log('Project is archived.') 
+    return false
+  }
+
   if (config.deploy.only_update_app !== true) {
     console.log('only_update_app = false')
     return false
