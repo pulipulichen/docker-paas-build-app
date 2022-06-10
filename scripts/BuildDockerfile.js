@@ -70,6 +70,9 @@ echo "==[ls -l /paas_app/app/]========="
 ls -l /paas_app/app/
 echo "==[ls -l /]========="
 ls -l /
+echo "==[ls -l /app]========="
+ls -l /app
+echo "============"
 git reset --hard
 git pull origin ${REPO}
 
