@@ -63,15 +63,15 @@ async function buildEntrypoint ({config, BUILD_DIR, REPO}) {
 # =================================
 # Git Reset
 
-#if [ $\{GIT_MODE\} ]; then
-  CURRENT_DIR=\`pwd\`
+CURRENT_DIR=\`pwd\`
 
-  cd /paas_app/app/
-  git reset --hard
-  git pull origin ${REPO}
+cd /paas_app/app/
+ls -l /paas_app/app/
+ls -l /
+git reset --hard
+git pull origin ${REPO}
 
-  cd $CURRENT_DIR
-#fi
+cd $CURRENT_DIR
 `
   if (config.deploy.only_update_app === true) {
     script += scriptGitMode
