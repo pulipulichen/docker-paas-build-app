@@ -102,6 +102,9 @@ function setupDockerfileCopy ({config, REPO}) {
   let { WORKDIR } = config.environment.app.app.Dockerfile
   let app_path = WORKDIR
   let app_path_parent = path.dirname(app_path)
+  while (app_path_parent.startsWith('//')) {
+    app_path_parent = app_path_parent.slice(1)
+  }
   let app_path_basename = path.basename(app_path)
 
   const APP_GIT_URL = config.environment.build.app_git_url
