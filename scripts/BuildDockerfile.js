@@ -175,6 +175,25 @@ function filterDockerfile(dockerfile) {
   })
 }
 
+function parseDockerfile() {
+  let BaseDockerfile = fs.readFileSync(`./config/Dockerfile`, 'utf8')
+
+  let lines = BaseDockerfile.split('\n')
+  let before
+  let after
+
+  for (let i = 0; i < lines.length; i++) {
+    let line = lines[i].trim()
+    if (line.startsWith('FROM')) {
+      // 表示此之前的都是before
+      before = lines.slice(0, i + 1).join('\n')
+      after = lines.slice(i + 1).join('\n')
+    }
+  }
+  
+  return {before, after}
+}
+
 // ----------------------------------------------------------------
 
 module.exports = async function (config) {
@@ -212,14 +231,16 @@ module.exports = async function (config) {
 
   // ------------------------
   // Build Dockerfile
-  let BaseDockerfile = fs.readFileSync(`./config/Dockerfile`, 'utf8')
+  let BaseDockerfile = parseDockerfile()
+
+  
 
   //BaseDockerfile = filterDockerfile(BaseDockerfile)
 
   let TZ = config.environment.app.app.Dockerfile.TZ
   let containerEntrypointFolder = '/paas_data/'
 
-  let dockerfile = `${BaseDockerfile}
+  let dockerfile = `${BaseDockerfile.before}
 
 # Timezone
 ENV DEBIAN_FRONTEND=noninteractive
@@ -248,6 +269,12 @@ ${dockerfileCopy}
 # ENTRYPOINT
 COPY build_tmp/entrypoint.sh ${containerEntrypointFolder}
 RUN chmod 777 ${containerEntrypointFolder}entrypoint.sh
+
+# ============================================
+
+${BaseDockerfile.after}
+
+# ============================================
 
 CMD ["sh", "${containerEntrypointFolder}entrypoint.sh"]
 
