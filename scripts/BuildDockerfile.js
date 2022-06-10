@@ -139,8 +139,7 @@ RUN git config --global pull.rebase true
 RUN ls -l ${path.join(containerAppFolder,REPO_NAME)}
 
 # APP
-#RUN rm -rf ${path.join(app_path_parent,app_path_basename)} || echo "No folder: ${path.join(app_path_parent,app_path_basename)}"
-#RUN rm -rf ${path.join(app_path_parent,app_path_basename)} || echo "No folder: ${path.join(app_path_parent,app_path_basename)}"
+RUN rm -rf ${path.join(app_path_parent,app_path_basename)} || echo "No folder: ${path.join(app_path_parent,app_path_basename)}"
 RUN ln -s ${path.join(containerAppFolder, REPO_NAME)} ${path.join(app_path_parent)}
 RUN mv ${path.join(app_path_parent, REPO_NAME)} ${path.join(app_path_parent, app_path_basename)} || echo "Same folder name: ${path.join(app_path_parent,app_path_basename)}"
 
