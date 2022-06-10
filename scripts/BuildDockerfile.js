@@ -125,7 +125,7 @@ RUN mkdir -p ${containerAppFolder}
 WORKDIR ${containerAppFolder}
 RUN git clone --no-checkout ${APP_GIT_URL} || echo "git is existed"
 
-WORKDIR ${path.join(containerAppFolde,REPO_NAME)}/
+WORKDIR ${path.join(containerAppFolder,REPO_NAME)}/
 RUN git config --global user.email "${username}@${host}"
 RUN git config --global user.name "${username}"
 RUN git checkout -b ${REPO} || git checkout ${REPO}
