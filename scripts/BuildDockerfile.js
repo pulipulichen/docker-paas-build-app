@@ -270,7 +270,7 @@ ${copyCmd}
 
 # ENTRYPOINT
 COPY build_tmp/entrypoint.sh ${containerEntrypointFolder}
-RUN chmod 777 ${containerEntrypointFolder}entrypoint.sh
+RUN chmod 777 ${path.join(containerEntrypointFolder, 'entrypoint.sh')}
 
 # ============================================
 
@@ -280,7 +280,7 @@ ${BaseDockerfile.after}
 
 ${dockerfileCopy}
 
-CMD ["sh", "${containerEntrypointFolder}entrypoint.sh"]
+CMD ["sh", "${path.join(containerEntrypointFolder, 'entrypoint.sh')}"]
 
 WORKDIR ${WORKDIR}
 
