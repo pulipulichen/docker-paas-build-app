@@ -55,7 +55,7 @@ module.exports = async function (config) {
   }
   catch (e) {
     console.log('== [ Source: Dockerfile ] =======================================')
-    console.log(fs.readFileSync(`./build_tmp/Dockerfile`, 'utf8'))
+    console.log(fs.readFileSync(path.join(BUILD_DIR, '/config/Dockerfile'), 'utf8'))
     console.log('============================================================')
     throw e
   }
