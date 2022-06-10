@@ -54,6 +54,7 @@ module.exports = async function (config) {
     await ShellExec(`docker build -f ./build_tmp/Dockerfile -t ${QUAY_PREFIX}/${REPO}:app-${TAG} .`)
   }
   catch (e) {
+    console.log('== [ Source: Dockerfile ] =======================================')
     console.log(fs.readFileSync(`./build_tmp/Dockerfile`, 'utf8'))
     console.log('============================================================')
     throw e
