@@ -10,6 +10,7 @@
     "fast-glob": "3.2.11",
     "js-yaml": "4.1.0",
     "node-fetch": "2.0.0",
-    "unzipper": "0.10.11"
+    "unzipper": "0.10.11",
+    "translate": "1.4.1"
   }
 }

@@ -10,25 +10,7 @@ const LoadYAMLConfig = require('./lib/LoadYAMLConfig.js')
 
 const BuildTag = require('./BuildTag.js')
 
-async function setupQuay () {
-  let config = await LoadYAMLConfig()
-  // ----------------------------------------------------------------
-  // setup QUAY token
-
-  //fs.mkdirSync('~/.docker')
-  await ShellExec(`mkdir -p ~/.docker`) 
-  let token = {
-    "auths": {}
-  }
-  token.auths[config.environment.build.quay_auth_host] = {
-    "auth": config.environment.build.quay_auth_token,
-    "email": ""
-  }
-  fs.writeFileSync(process.env['HOME'] + '/.docker/config.json', JSON.stringify(token), 'utf8')
-  //await ShellExec(`mv /tmp/config.json ~/.docker/`)
-  // await ShellExec(`cat ~/.docker/config.json`)
-
-}
+const setupQuay = require('./lib/setupQuay.js')
 
 const BUILD_DIR = path.join('/builds/', process.env.CI_PROJECT_NAMESPACE, process.env.CI_PROJECT_NAME)
 

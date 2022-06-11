@@ -1,4 +1,4 @@
-TAG=20220610-1516
+TAG=20220611-2339
 
 REPO=docker-paas-build-app
 

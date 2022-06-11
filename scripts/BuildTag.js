@@ -1,23 +1,11 @@
 const LoadYAMLConfig = require('./lib/LoadYAMLConfig.js')
-
-function getTagPrefix(config) {
-  let prefix = config.deploy.tag_prefix
-
-  if (!prefix) {
-    return
-  }
-
-  prefix = prefix.toLowerCase()
-  prefix = prefix.replace(/[^a-zA-Z0-9\-]/g, "")
-
-  return prefix
-}
+const getTagPrefix = require('./lib/getTagPrefix')
 
 async function buildTag () {
   let config = await LoadYAMLConfig()
 
   let TAG = process.env.CI_COMMIT_SHORT_SHA
-  let prefix = getTagPrefix(config)
+  let prefix = await getTagPrefix()
   if (prefix && prefix !== '') {
     TAG = prefix + '-' + TAG
   }
