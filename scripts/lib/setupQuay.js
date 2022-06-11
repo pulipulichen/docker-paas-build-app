@@ -1,4 +1,5 @@
 const LoadYAMLConfig = require('./LoadYAMLConfig.js')
+const ShellExec = require('./ShellExec.js')
 
 async function setupQuay () {
   let config = await LoadYAMLConfig()
