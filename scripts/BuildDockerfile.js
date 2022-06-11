@@ -279,13 +279,15 @@ RUN echo "PermitRootLogin yes" >> /etc/ssh/sshd_config
 ENV DATA_PATH=${data_path}
 ${copyCmd}
 
-# ENTRYPOINT
-COPY build_tmp/entrypoint.sh ${containerEntrypointFolder}
-RUN chmod 777 ${path.join(containerEntrypointFolder, 'entrypoint.sh')}
-
 # ============================================
 
 ${BaseDockerfile.after}
+
+# ============================================
+
+# ENTRYPOINT
+COPY build_tmp/entrypoint.sh ${containerEntrypointFolder}
+RUN chmod 777 ${path.join(containerEntrypointFolder, 'entrypoint.sh')}
 
 # ============================================
 
