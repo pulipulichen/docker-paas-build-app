@@ -1,5 +1,7 @@
 const LoadYAMLConfig = require('./LoadYAMLConfig.js')
 const ShellExec = require('./ShellExec.js')
+const fs = require('fs')
+const path = require('path')
 
 async function setupQuay () {
   let config = await LoadYAMLConfig()
@@ -15,7 +17,7 @@ async function setupQuay () {
     "auth": config.environment.build.quay_auth_token,
     "email": ""
   }
-  fs.writeFileSync(process.env['HOME'] + '/.docker/config.json', JSON.stringify(token), 'utf8')
+  fs.writeFileSync(path.join(process.env['HOME'], '/.docker/config.json'), JSON.stringify(token), 'utf8')
   //await ShellExec(`mv /tmp/config.json ~/.docker/`)
   // await ShellExec(`cat ~/.docker/config.json`)
 
