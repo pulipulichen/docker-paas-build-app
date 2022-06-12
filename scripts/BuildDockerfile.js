@@ -19,7 +19,7 @@ async function setupData ({BUILD_DIR, system_user}) {
 
   // 解壓縮
   // https://www.npmjs.com/package/unzipper
-  let targetDir = `./build_tmp/data`
+  let targetDir = `/build_tmp/data`
   let containerBackupFolder = '/paas_data/app/'
 
   if (fs.existsSync(targetDir)) {
