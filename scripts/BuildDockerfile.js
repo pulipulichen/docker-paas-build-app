@@ -34,6 +34,10 @@ async function setupData ({BUILD_DIR, system_user}) {
     await unzip(zipPath, targetDir)
     
     console.log('Unzip app.zip to', targetDir)
+    await ShellExec(`ls -l ${targetDir}`)
+    if (fs.readdirSync(targetDir).length === 0) {
+      throw new Error(`Unzip app.zip to ${targetDir} is failed.`)
+    }
 
     copyCmd = `COPY ${targetDir} ${containerBackupFolder}
 RUN chmod -R 777 ${path.join(containerBackupFolder, '/*')}`
