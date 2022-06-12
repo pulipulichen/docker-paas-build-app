@@ -33,6 +33,7 @@ module.exports = async function (config) {
   console.log(`Build Dockerfile...`)
   console.log('============================================================')
   try {
+    await ShellExec(`pwd`)
     await ShellExec(`docker build -f ./build_tmp/Dockerfile -t ${QUAY_PREFIX}/${REPO}:app-${TAG} .`)
   }
   catch (e) {

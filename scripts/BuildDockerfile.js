@@ -19,7 +19,7 @@ async function setupData ({BUILD_DIR, system_user}) {
 
   // 解壓縮
   // https://www.npmjs.com/package/unzipper
-  let targetDir = `/build_tmp/data`
+  let targetDir = `./build_tmp/data`
   let containerBackupFolder = '/paas_data/app/'
 
   if (fs.existsSync(targetDir)) {
@@ -31,6 +31,7 @@ async function setupData ({BUILD_DIR, system_user}) {
   let copyCmd = ''
   if (fs.existsSync(zipPath)) {
 
+    await ShellExec(`pwd`)
     await unzip(zipPath, targetDir)
     
     console.log('Unzip app.zip to', targetDir)
