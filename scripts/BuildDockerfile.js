@@ -62,6 +62,10 @@ function setupUser (USER) {
 async function buildEntrypoint ({config, BUILD_DIR, REPO}) {
   let CMD = await PraseDockerfile.getCMD()
 
+  if (CMD.startsWith('nodemon')) {
+    CMD = CMD + ' --exitcrash' 
+  }
+
   let script = fs.readFileSync('/app/docker-paas-build-app/scripts/entrypoint.sh', 'utf8')
 
   let scriptGitMode = `
