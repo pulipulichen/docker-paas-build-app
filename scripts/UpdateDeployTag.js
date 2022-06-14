@@ -71,7 +71,7 @@ FORCE_DEPLOY.txt is created.
   // else if (config.deploy.only_update_app === true) {
   else if (await CheckOnlyUpdateApp([
     'config/Dockerfile'
-  ]))
+  ])) {
     console.log('only_update_app')
     return false
   }
