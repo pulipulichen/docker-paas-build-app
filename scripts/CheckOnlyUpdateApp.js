@@ -27,6 +27,7 @@ module.exports = async function (prefixList = []) {
   for (let i = 0; i < prefixList.length; i++) {
     let prefix = prefixList[i]
     for (let j = 0; j < filelist; j++) {
+      console.log({file: filelist[j], prefix, result: (filelist[j].startsWith(prefix))})
       if (filelist[j].startsWith(prefix)) {
         process.chdir(pwd)
         return false
