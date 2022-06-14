@@ -87,7 +87,7 @@ git pull origin ${REPO}
 
 cd $CURRENT_DIR
 `
-  if (config.deploy.only_update_app === true) {
+  if (config.environment.app.app.only_update_app === true) {
     script += scriptGitMode
   }
   
@@ -161,7 +161,7 @@ RUN mv ${path.join('/tmp', REPO_NAME)} ${path.join(app_path_parent, app_path_bas
 COPY app/ ${app_path}
 `
 
-  if (config.deploy.only_update_app === true) {
+  if (config.environment.app.app.only_update_app === true) {
     dockerfileCopy = dockerfileAppGit
   }
 

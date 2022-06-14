@@ -2,7 +2,7 @@ const fs = require('fs')
 const ShellExec = require('./lib/ShellExec.js')
 
 async function main (config) {
-  if (config.deploy.only_update_app !== true) {
+  if (config.environment.app.app.only_update_app !== true) {
     console.log('Git mode is disabled.')
     return
   }

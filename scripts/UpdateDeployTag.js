@@ -55,7 +55,7 @@ async function main (config) {
   lastTagIsGit = lastTag.trim().endsWith('-git')
     
 
-  if (lastTagIsGit !== config.deploy.only_update_app) {
+  if (lastTagIsGit !== config.environment.app.app.only_update_app) {
     let tag = await BuildTag()
     console.log({
       lastTag,
@@ -109,7 +109,7 @@ push
   let lastTag = fs.readFileSync(path.join(tmpGitPath + '/' + REPO_NAME, 'TAG_APP.txt'), 'utf8')
   let lastTagIsGit = lastTag.trim().endsWith('-git')
 
-  if (lastTagIsGit === config.deploy.only_update_app) {
+  if (lastTagIsGit === config.environment.app.app.only_update_app) {
     createForceDeployCMD = `echo "Skip force deploy."`
   }
 
@@ -130,7 +130,7 @@ push
     `git push -f ${DEPLOY_GIT_URL}`
   ], {retry: 3})
 
-  if (config.deploy.only_update_app === false) {
+  if (config.environment.app.app.only_update_app === false) {
     await showReadyForImportMessage(config)
   }
 }

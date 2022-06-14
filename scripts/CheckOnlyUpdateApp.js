@@ -13,7 +13,7 @@ module.exports = async function (prefixList = []) {
   }
   
   if (prefixList.length === 0) {
-    return (config.deploy.only_update_app === true)
+    return (config.environment.app.app.only_update_app === true)
   }
 
   // const pwd = await ShellExec(`pwd`)
@@ -36,5 +36,5 @@ module.exports = async function (prefixList = []) {
   }
 
   process.chdir(pwd)
-  return (config.deploy.only_update_app === true)
+  return (config.environment.app.app.only_update_app === true)
 }

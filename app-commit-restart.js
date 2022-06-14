@@ -40,7 +40,7 @@ const main = async function () {
     return false
   }
 
-  if (config.deploy.only_update_app !== true) {
+  if (config.environment.app.app.only_update_app !== true) {
     console.log('only_update_app = false')
     return false
   }
