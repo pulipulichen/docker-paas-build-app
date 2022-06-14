@@ -284,17 +284,19 @@ RUN apt-get install -y openssh-server
 RUN systemctl enable ssh
 RUN echo "PermitRootLogin yes" >> /etc/ssh/sshd_config
 
-# DATA
-ENV DATA_PATH=${data_path}
-${copyCmd}
-
 # ============================================
 
 ${BaseDockerfile.after}
 
 # ============================================
+# DATA
 
+ENV DATA_PATH=${data_path}
+${copyCmd}
+
+# ============================================
 # ENTRYPOINT
+
 COPY build_tmp/entrypoint.sh ${containerEntrypointFolder}
 RUN chmod 777 ${path.join(containerEntrypointFolder, 'entrypoint.sh')}
 

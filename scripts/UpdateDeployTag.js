@@ -2,6 +2,7 @@
 const ShellExec = require('./lib/ShellExec.js')
 const fs = require('fs')
 const path = require('path')
+const CheckOnlyUpdateApp = require('./CheckOnlyUpdateApp')
 
 function getRepoName (config) {
   const DEPLOY_GIT_URL = config.environment.build.deploy_git_url
@@ -67,7 +68,10 @@ FORCE_DEPLOY.txt is created.
 ================================================
 `)
   }
-  else if (config.deploy.only_update_app === true) {
+  // else if (config.deploy.only_update_app === true) {
+  else if (await CheckOnlyUpdateApp([
+    'config/Dockerfile'
+  ]))
     console.log('only_update_app')
     return false
   }
