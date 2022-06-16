@@ -218,6 +218,19 @@ function parseDockerfile() {
   return {before, after}
 }
 
+function enableEmailScript (config) {
+  if (!config.app || !config.app.enable_email) {
+    return ''
+  }
+
+  return `
+# ----------------------------------------------------------------
+# SSH
+
+RUN apt-get install -y sendmail
+`
+}
+
 // ----------------------------------------------------------------
 
 module.exports = async function (config) {
@@ -283,6 +296,8 @@ RUN apt update
 RUN apt-get install -y openssh-server nano vim
 RUN systemctl enable ssh
 RUN echo "PermitRootLogin yes" >> /etc/ssh/sshd_config
+
+${enableEmailScript(config)}
 
 # ============================================
 

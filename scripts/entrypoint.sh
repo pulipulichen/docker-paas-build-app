@@ -9,6 +9,11 @@ fi
 
 /etc/init.d/ssh start
 
+if [ "${ENABLE_MAIL}" = "true" ]; then
+  /etc/init.d/postfix start
+  /etc/init.d/sendmail start
+fi
+
 # =================================
 # Data Reset
 
