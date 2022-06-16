@@ -225,9 +225,10 @@ function enableEmailScript (config) {
 
   return `
 # ----------------------------------------------------------------
-# SSH
+# Enable Email
 
-RUN apt-get install -y sendmail
+RUN apt-get install -y postfix
+RUN apt-get install -y sendmail || echo "Install sendmail failed"
 `
 }
 
