@@ -1,29 +1,29 @@
 const fs = require('fs')
 const ShellExec = require('./lib/ShellExec.js')
 
-async function appendPathToGitignore(data_path) {
-  if (!data_path || 
-       typeof(data_path) !== 'string' ||
-       !data_path.startsWith('/app/')) {
-         return true
-  }
+// async function appendPathToGitignore(data_path) {
+//   if (!data_path || 
+//        typeof(data_path) !== 'string' ||
+//        !data_path.startsWith('/app/')) {
+//          return true
+//   }
 
-  let ignorePath = data_path.slice(5) 
+//   let ignorePath = data_path.slice(5) 
   
-  await ShellExec(`echo "${ignorePath}" >> /tmp/git-deploy/${REPO_NAME}/.gitignore`)
-}
+//   await ShellExec(`echo "${ignorePath}" >> /tmp/git-deploy/${REPO_NAME}/.gitignore`)
+// }
 
-async function appendDataPathToGitignore(config) {
+// async function appendDataPathToGitignore(config) {
 
-  if (config.app && config.app.data_path) {
-    await appendPathToGitignore(config.app.data_path)
-  }
-  if (config.app && Array.isArray(config.app.share_data_path)) {
-    for (let i = 0; i < config.app.share_data_path.length; i++) {
-      await appendPathToGitignore(config.app.share_data_path[i])
-    }
-  }
-}
+//   if (config.app && config.app.data_path) {
+//     await appendPathToGitignore(config.app.data_path)
+//   }
+//   if (config.app && Array.isArray(config.app.share_data_path)) {
+//     for (let i = 0; i < config.app.share_data_path.length; i++) {
+//       await appendPathToGitignore(config.app.share_data_path[i])
+//     }
+//   }
+// }
 
 async function main (config) {
   if (config.environment.app.app.only_update_app !== true) {
@@ -72,7 +72,7 @@ async function main (config) {
 
   await ShellExec(`cd /tmp/git-deploy/${REPO_NAME}/; git clean -fxd`)
   await ShellExec(`cp -pr ${BUILD_DIR}/app/.[^.]* /tmp/git-deploy/${REPO_NAME}`)
-  await appendDataPathToGitignore(config)
+  // await appendDataPathToGitignore(config)
   // await ShellExec(`rsync -a −−delete ${BUILD_DIR}/app/ /tmp/git-deploy/${REPO_NAME}/`)
   
   // -------------------------------
