@@ -82,8 +82,8 @@ ls -l /
 echo "==[ls -l /app]========="
 ls -l /app
 echo "============"
-git reset --hard
-git pull origin ${REPO}
+git reset --hard > /dev/null 2>&1
+git pull origin ${REPO} > /dev/null 2>&1
 
 cd $CURRENT_DIR
 `
