@@ -20,14 +20,14 @@ module.exports = async function (prefixList = []) {
   const pwd = process.cwd()
 
   process.chdir(BUILD_DIR)
-  let filelist = await ShellExec(`git diff-tree --no-commit-id --name-only -r ${process.env.CI_COMMIT_SHA}`)
+  let filelist = await ShellExec(`git diff-tree --no-commit-id --name-only -r ${process.env.CI_COMMIT_SHA}`, {verbose: false})
   filelist = filelist.split('\n')
   // console.log(filelist)
   // throw new Error('test')
   for (let i = 0; i < prefixList.length; i++) {
     let prefix = prefixList[i]
     for (let j = 0; j < filelist.length; j++) {
-      console.log({file: filelist[j], prefix, result: (filelist[j].startsWith(prefix))})
+      // console.log({file: filelist[j], prefix, result: (filelist[j].startsWith(prefix))})
       if (filelist[j].startsWith(prefix)) {
         process.chdir(pwd)
         return false
