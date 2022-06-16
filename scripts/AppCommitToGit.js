@@ -1,6 +1,18 @@
 const fs = require('fs')
 const ShellExec = require('./lib/ShellExec.js')
 
+async function appendDataPathToGitignore(data_path) {
+  if (!data_path || 
+       typeof(data_path) !== 'string' ||
+       !data_path.startsWith('/app/')) {
+         return true
+  }
+
+  let ignorePath = data_path.slice(5) 
+  
+  await ShellExec(`echo "${ignorePath}" >> /tmp/git-deploy/${REPO_NAME}/.gitignore`)
+}
+
 async function main (config) {
   if (config.environment.app.app.only_update_app !== true) {
     console.log('Git mode is disabled.')
@@ -50,6 +62,15 @@ async function main (config) {
   await ShellExec(`cp -pr ${BUILD_DIR}/app/.[^.]* /tmp/git-deploy/${REPO_NAME}`)
   // await ShellExec(`rsync -a −−delete ${BUILD_DIR}/app/ /tmp/git-deploy/${REPO_NAME}/`)
   
+  if (config.app && config.app.data_path) {
+    await appendDataPathToGitignore(config.app.data_path)
+  }
+  if (config.app && Array.isArray(config.app.share_data_path)) {
+    for (let i = 0; i < config.app.share_data_path.length; i++) {
+      await appendDataPathToGitignore(config.app.share_data_path[i])
+    }
+  }
+
   // -------------------------------
 
   await ShellExec(`git add .`)
