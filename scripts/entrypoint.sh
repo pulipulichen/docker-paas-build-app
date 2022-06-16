@@ -35,4 +35,8 @@ fi
 
 if [ \( ${DATA_PATH} \) ]; then
   chmod 777 "$DATA_PATH"
+
+  if [ ! -f "${DATA_PATH}/.gitignore" ]; then
+    echo "*\n!.gitignore" >> "${DATA_PATH}/.gitignore"
+  fi
 fi
