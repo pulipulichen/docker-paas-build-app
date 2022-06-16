@@ -46,7 +46,7 @@ async function main (config) {
 
   // -------------------------------
 
-  await ShellExec(`cp -r ${BUILD_DIR}/app/* /tmp/git-deploy/${REPO_NAME}`)
+  await ShellExec(`cp -pr ${BUILD_DIR}/app/* /tmp/git-deploy/${REPO_NAME}`)
   
   // -------------------------------
 
