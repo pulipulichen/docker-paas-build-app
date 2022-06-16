@@ -27,3 +27,7 @@ if [ -d "/paas_data/app/" ]; then
 else
   echo "Data folder is not existing. /paas_data/app/"
 fi
+
+if [ \( ${DATA_PATH} \) ]; then
+  chmod 777 "$DATA_PATH"
+fi

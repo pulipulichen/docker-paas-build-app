@@ -280,7 +280,7 @@ ENV TIMEZONE=${TZ}
 
 # WEBSSH
 RUN apt update
-RUN apt-get install -y openssh-server
+RUN apt-get install -y openssh-server nano vim
 RUN systemctl enable ssh
 RUN echo "PermitRootLogin yes" >> /etc/ssh/sshd_config
 
