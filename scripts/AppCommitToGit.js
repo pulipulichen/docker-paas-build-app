@@ -28,7 +28,7 @@ async function main (config) {
   // }
   
   const DEPLOY_GIT_URL = config.environment.build.app_git_url
-  await ShellExec(`git clone -b ${REPO} ${DEPLOY_GIT_URL} || git clone ${DEPLOY_GIT_URL}`, {retry: 3})
+  await ShellExec(`git clone -b ${REPO} ${DEPLOY_GIT_URL} --no-checkout || git clone ${DEPLOY_GIT_URL}`, {retry: 3})
 
   let REPO_NAME = DEPLOY_GIT_URL.slice(DEPLOY_GIT_URL.lastIndexOf('/') + 1)
   REPO_NAME = REPO_NAME.slice(0, REPO_NAME.lastIndexOf('.'))
@@ -39,14 +39,15 @@ async function main (config) {
   
   let {username, host} = new URL(DEPLOY_GIT_URL)
 
-  ShellExec(`git config --global user.email "${username}@${host}"`)
-  ShellExec(`git config --global user.name "${username}"`)
+  await ShellExec(`git config --global user.email "${username}@${host}"`)
+  await ShellExec(`git config --global user.name "${username}"`)
 
-  ShellExec(`git checkout -b ${REPO} || git checkout ${REPO}`, {retry: 3})
+  await ShellExec(`git checkout -b ${REPO} || git checkout ${REPO}`, {retry: 3})
 
   // -------------------------------
 
-  await ShellExec(`cp -pr ${BUILD_DIR}/app/* /tmp/git-deploy/${REPO_NAME}`)
+  // await ShellExec(`cp -pr ${BUILD_DIR}/app/.[^.]* /tmp/git-deploy/${REPO_NAME}`)
+  await ShellExec(`rsync -a −−delete ${BUILD_DIR}/app/ /tmp/git-deploy/${REPO_NAME}`)
   
   // -------------------------------
 
