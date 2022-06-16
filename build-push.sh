@@ -1,7 +1,6 @@
-TAG=20220611-2339
+TAG=20220616-2122
 
 REPO=docker-paas-build-app
-
 
 docker build -t pudding/$REPO:$TAG .
 

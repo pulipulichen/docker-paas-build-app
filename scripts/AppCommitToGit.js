@@ -47,7 +47,7 @@ async function main (config) {
   // -------------------------------
 
   // await ShellExec(`cp -pr ${BUILD_DIR}/app/.[^.]* /tmp/git-deploy/${REPO_NAME}`)
-  await ShellExec(`rsync -a −−delete ${BUILD_DIR}/app/ /tmp/git-deploy/${REPO_NAME}`)
+  await ShellExec(`rsync -a −−delete ${BUILD_DIR}/app/ /tmp/git-deploy/${REPO_NAME}/`)
   
   // -------------------------------
 
