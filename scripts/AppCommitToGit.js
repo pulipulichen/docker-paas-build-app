@@ -1,5 +1,6 @@
 const fs = require('fs')
 const ShellExec = require('./lib/ShellExec.js')
+const ShellSpawn = require('./lib/ShellSpawn.js')
 
 // async function appendPathToGitignore(data_path) {
 //   if (!data_path || 
@@ -78,7 +79,7 @@ async function main (config) {
   // -------------------------------
 
   await ShellExec(`git add .`, {verbose: false})
-  await ShellExec(`git commit -m "CI TAG: ${process.env.CI_COMMIT_SHORT_SHA}" --allow-empty`, {verbose: false})
+  await ShellSpawn(`git commit -m "CI TAG: ${process.env.CI_COMMIT_SHORT_SHA}" --allow-empty`, {verbose: false})
   await ShellExec(`git push -f ${DEPLOY_GIT_URL}`, {retry: 3})
 
 }
