@@ -61,6 +61,7 @@ function setupUser (USER) {
 
 async function buildEntrypoint ({config, BUILD_DIR, REPO}) {
   let CMD = await PraseDockerfile.getCMD()
+  // let {CMD, WORKDIR, USER} = config.environment.app.app.Dockerfile
 
   if (CMD.startsWith('nodemon')) {
     CMD = CMD + ' --exitcrash' 
@@ -75,13 +76,13 @@ async function buildEntrypoint ({config, BUILD_DIR, REPO}) {
 CURRENT_DIR=\`pwd\`
 
 cd /paas_app/app/
-echo "==[ls -l /paas_app/app/]========="
-ls -l /paas_app/app/
-echo "==[ls -l /]========="
-ls -l /
-echo "==[ls -l /app]========="
-ls -l /app
-echo "============"
+#echo "==[ls -l /paas_app/app/]========="
+#ls -l /paas_app/app/
+#echo "==[ls -l /]========="
+#ls -l /
+#echo "==[ls -l /app]========="
+#ls -l /app
+#echo "============"
 git reset --hard > /dev/null 2>&1
 git pull origin ${REPO} > /dev/null 2>&1
 
@@ -113,7 +114,7 @@ ${CMD}
 }
 
 function setupDockerfileCopy ({config, REPO}) {
-  let { WORKDIR } = config.environment.app.app.Dockerfile
+  let { WORKDIR, USER } = config.environment.app.app.Dockerfile
   let app_path = WORKDIR
   let app_path_parent = path.dirname(app_path)
   while (app_path_parent.startsWith('//')) {
@@ -149,9 +150,9 @@ RUN git config --global pull.rebase true
 
 # APP
 RUN rm -rf ${path.join(app_path_parent,app_path_basename)} || echo "No folder: ${path.join(app_path_parent,app_path_basename)}"
-RUN rm -rf ${path.join('/tmp', REPO_NAME)}
-RUN ln -s ${path.join(containerAppFolder, REPO_NAME)} /tmp
-RUN mv ${path.join('/tmp', REPO_NAME)} ${path.join(app_path_parent, app_path_basename)} || echo "Same folder name: ${path.join(app_path_parent,app_path_basename)}"
+RUN rm -rf ${path.join('/tmp', '/app')}
+RUN ln -s ${path.join(containerAppFolder, REPO_NAME, '/app')} /tmp
+RUN mv ${path.join('/tmp', '/app')} ${path.join(app_path_parent, app_path_basename)} || echo "Same folder name: ${path.join(app_path_parent,app_path_basename)}"
 
 #RUN ls -l ${path.join(app_path_parent)}
 #RUN ls -l ${path.join(containerAppFolder, REPO_NAME)}

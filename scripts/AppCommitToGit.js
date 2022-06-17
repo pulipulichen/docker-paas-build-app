@@ -70,8 +70,8 @@ async function main (config) {
 
   // -------------------------------
 
-  await ShellExec(`cd /tmp/git-deploy/${REPO_NAME}/; git clean -fxd`)
-  await ShellExec(`cp -pr ${BUILD_DIR}/app/.[^.]* /tmp/git-deploy/${REPO_NAME}`)
+  await ShellExec(`rm -rf /tmp/git-deploy/${REPO_NAME}/app`)
+  await ShellExec(`cp -pr ${BUILD_DIR}/app /tmp/git-deploy/${REPO_NAME}/`)
   // await appendDataPathToGitignore(config)
   // await ShellExec(`rsync -a −−delete ${BUILD_DIR}/app/ /tmp/git-deploy/${REPO_NAME}/`)
   
