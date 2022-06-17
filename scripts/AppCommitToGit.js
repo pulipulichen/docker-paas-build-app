@@ -77,8 +77,8 @@ async function main (config) {
   
   // -------------------------------
 
-  await ShellExec(`git add .`)
-  await ShellExec(`git commit -m "CI TAG: ${process.env.CI_COMMIT_SHORT_SHA}" --allow-empty`)
+  await ShellExec(`git add .`, {verbose: false})
+  await ShellExec(`git commit -m "CI TAG: ${process.env.CI_COMMIT_SHORT_SHA}" --allow-empty`, {verbose: false})
   await ShellExec(`git push -f ${DEPLOY_GIT_URL}`, {retry: 3})
 
 }

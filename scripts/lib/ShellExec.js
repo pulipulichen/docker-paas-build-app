@@ -25,7 +25,7 @@ module.exports = async function (cmd, options = {}) {
     }
   }
 
-  let output = ''
+  // let output = ''
 
   let currentRetry = 0
   let run = async () => {
@@ -51,7 +51,13 @@ module.exports = async function (cmd, options = {}) {
         }
         
         // resolve(`[STDOUT]\n${stdout}`)
-        resolve(stdout)
+        // resolve(stdout)
+        if (verbose) {
+          resolve(stdout)
+        }
+        else {
+          resolve('')
+        }
       });
     })     
   }
