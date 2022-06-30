@@ -23,15 +23,17 @@ module.exports = {
 
         values = await LoadYAMLConfig()
         const ARGOCD_AUTH_TOKEN = values.environment.build.argocd_auth_token
-
+        let jsonString
         try {
-            config = JSON.parse(Buffer.from(ARGOCD_AUTH_TOKEN, 'base64').toString())
+            jsonString = Buffer.from(ARGOCD_AUTH_TOKEN, 'base64').toString()
+            config = JSON.parse(jsonString)
 
             if (!config.username || !config.password || !config.server) {
                 throw new Error('ARGOCD_AUTH_TOKEN is not well configured.')
             }
         }
         catch (e) {
+            console.log(jsonString)
             console.error(e)
             throw new Error('ARGOCD_AUTH_TOKEN is not well configured.')
         }
