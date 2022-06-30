@@ -14,13 +14,14 @@ axiosRetry(axios, { retryDelay: (retryCount) => {
 const tmpTokenPath = '/tmp/argocd.token.txt'
 
 let config
+let values
 module.exports = {
     getConfig: async function () {
         if (config) {
             return config
         }
 
-        let values = await LoadYAMLConfig()
+        values = await LoadYAMLConfig()
         const ARGOCD_AUTH_TOKEN = values.environment.build.argocd_auth_token
 
         try {
@@ -120,7 +121,35 @@ module.exports = {
         const url = config.server + '/api/v1/applications'
 
         //appName = 'test20220428-2220-pudding'
-        const data = { "apiVersion": "argoproj.io/v1alpha1", "kind": "Application", "metadata": { "name": 'deploybot-' + appName }, "spec": { "destination": { "name": "", "namespace": "default", "server": "https://kubernetes.default.svc" }, "source": { "path": ".", "repoURL": "https://gitlab.nccu.syntixi.dev/deploybot/argocd.git", "targetRevision": appName }, "project": "default", "syncPolicy": { "automated": { "prune": true, "selfHeal": false }, "syncOptions": ["PruneLast=true"] } } }
+        const data = { 
+            "apiVersion": "argoproj.io/v1alpha1", 
+            "kind": "Application", 
+            "metadata": { 
+                "name": 'deploybot-' + appName 
+            }, 
+            "spec": { 
+                "destination": { 
+                    "name": "", 
+                    "namespace": "default", 
+                    "server": "https://kubernetes.default.svc" 
+                },         
+                "source": { 
+                    "path": ".", 
+                    // "repoURL": "https://gitlab.nccu.syntixi.dev/deploybot/argocd.git", 
+                    "repoURL": values.environment.build.deploy_git_url, 
+                    "targetRevision": appName 
+                }, 
+                "project": "default", 
+                "syncPolicy": { 
+                    "automated": { 
+                        "prune": true, 
+                        "selfHeal": false 
+                    }, 
+                    "syncOptions": 
+                    ["PruneLast=true"] 
+                } 
+            } 
+        }
 
         let result
         try {
