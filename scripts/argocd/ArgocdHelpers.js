@@ -405,7 +405,7 @@ module.exports = {
                 "body": "\"restart\"",
                 "method": "POST"
               });
-            console.log(result)
+            // console.log(result)
 
             return true
         }
