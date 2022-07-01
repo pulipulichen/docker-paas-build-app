@@ -33,6 +33,14 @@ else
   echo "Data folder is not existing. /paas_data/app/"
 fi
 
+if [ \( ${DATABASE_SQLITE_HOST} \) ]; then
+  chmod 777 "$DATABASE_SQLITE_HOST"
+
+  if [ ! -f "${DATABASE_SQLITE_HOST}/.gitignore" ]; then
+    echo "*\n!.gitignore" >> "${DATABASE_SQLITE_HOST}/.gitignore"
+  fi
+fi
+
 if [ \( ${DATA_PATH} \) ]; then
   chmod 777 "$DATA_PATH"
 
